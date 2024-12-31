@@ -1,0 +1,11 @@
+// 공통으로 사용할 변수를 선언합니다
+
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+:root{
+    --mainfont: "pretendard";
+    font-family: var(--mainfont);
+
+    --maincolor: #FF7F71;
+    --body: #F6F7FB;
+}
