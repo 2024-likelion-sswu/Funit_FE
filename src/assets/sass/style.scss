@@ -1,0 +1,9 @@
+// scss를 한 번에 묶어두고 index.js에서 이 파일만 import 합니다
+
+// setting
+@import "setting/common";
+@import "setting/reset";
+@import "setting/var";
+
+// section
+@import "section/main";
