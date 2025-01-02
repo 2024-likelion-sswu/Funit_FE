@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import Button from '../../components/Button';
 import icon from '../../assets/img/character/purpleeye.png'
 
-const Score1Page = () => {
+const Score2Page = () => {
     const [score, setScore] = useState(6); 
     const [nickname, setNickname] = useState('Guest');
     return (
@@ -17,8 +17,7 @@ const Score1Page = () => {
         </div>
     )
 }
-
-export default Score1Page
+export default Score2Page
 
 
 

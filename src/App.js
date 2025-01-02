@@ -5,6 +5,7 @@ import NicknamePage from './pages/testCreatePage/NicknamePage'
 import UrlF from './pages/mainPage/UrlFriend'
 import Score1Page from './pages/testScorePage/Score1Page'
 import Score2Page from './pages/testScorePage/Score2Page'
+import Score3Page from './pages/testScorePage/Score3Page'
 
 const App = () => {
     return (
@@ -15,6 +16,7 @@ const App = () => {
                 <Route path='/urlfriend' element={<UrlF />} />
                 <Route path ='/score1' element={<Score1Page/>} />
                 <Route path ='/score2' element={<Score2Page/>} />
+                <Route path ='/score3' element={<Score3Page/>} />
             </Routes>
         </BrowserRouter>
     )
