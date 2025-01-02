@@ -1,0 +1,16 @@
+.onboarding-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 141px;
+    }
+
+    p {
+        font-size: 22px;
+        font-weight: bold;
+        margin-top: 47px;
+    }
+}
