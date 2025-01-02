@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Main from './pages/mainPage/MainPage'
 import NicknamePage from './pages/testCreatePage/NicknamePage'
+import OnboardingPage from './pages/testCreatePage/OnboardingPage'
 import UrlF from './pages/mainPage/UrlFriend'
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
             <Routes>
                 <Route path='/' element={<Main />} />
                 <Route path='/nickname' element={<NicknamePage />} />
+                <Route path='/onboarding' element={<OnboardingPage />} />
                 <Route path='/' element={<UrlF />} />
             </Routes>
         </BrowserRouter>
