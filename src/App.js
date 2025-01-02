@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Main from './pages/mainPage/MainPage'
 import NicknamePage from './pages/testCreatePage/NicknamePage'
 import UrlF from './pages/mainPage/UrlFriend'
+import Score1Page from './pages/testScorePage/Score1Page'
 
 const App = () => {
     return (
@@ -10,7 +11,8 @@ const App = () => {
             <Routes>
                 <Route path='/' element={<Main />} />
                 <Route path='/nickname' element={<NicknamePage />} />
-                <Route path='/' element={<UrlF />} />
+                <Route path='/urlfriend' element={<UrlF />} />
+                <Route path ='/score1' element={<Score1Page/>} />
             </Routes>
         </BrowserRouter>
     )
