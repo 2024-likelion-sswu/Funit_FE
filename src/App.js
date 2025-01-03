@@ -4,6 +4,7 @@ import Main from './pages/mainPage/MainPage'
 import NicknamePage from './pages/testCreatePage/NicknamePage'
 import OnboardingPage from './pages/testCreatePage/OnboardingPage'
 import TestCreatePage from './pages/testCreatePage/TestCreatePage'
+import OnboardingPage2 from './pages/testCreatePage/OnboardingPage2'
 import UrlF from './pages/mainPage/UrlFriend'
 import Score1Page from './pages/testScorePage/Score1Page'
 import Score2Page from './pages/testScorePage/Score2Page'
@@ -17,6 +18,7 @@ const App = () => {
                 <Route path='/nickname' element={<NicknamePage />} />
                 <Route path='/onboarding' element={<OnboardingPage />} />
                 <Route path='/testCreate' element={<TestCreatePage />} />
+                <Route path='/onboarding2' element={<OnboardingPage2 />} />
                 <Route path='/urlfriend' element={<UrlF />} />
                 <Route path ='/score1' element={<Score1Page/>} />
                 <Route path ='/score2' element={<Score2Page/>} />
