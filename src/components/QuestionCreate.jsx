@@ -25,6 +25,7 @@ const QuestionCreate = ({question, option1, option2, option3, option4}) => {
                             id={`${question}1`}
                             checked={clickOption===option1}
                             onChange={handleOption}
+                            // className='radio-btn'
                         />
                     </label>
                     <label htmlFor={`${question}2`}>
@@ -36,6 +37,7 @@ const QuestionCreate = ({question, option1, option2, option3, option4}) => {
                             id={`${question}2`}
                             checked={clickOption===option2}
                             onChange={handleOption}
+                            // className='radio-btn'
                         />
                     </label>
                     <label htmlFor={`${question}3`}>
@@ -47,6 +49,7 @@ const QuestionCreate = ({question, option1, option2, option3, option4}) => {
                             id={`${question}3`}
                             checked={clickOption===option3}
                             onChange={handleOption}
+                            // className='radio-btn'
                         />
                     </label>
                     <label htmlFor={`${question}4`}>
@@ -58,6 +61,7 @@ const QuestionCreate = ({question, option1, option2, option3, option4}) => {
                             id={`${question}4`}
                             checked={clickOption===option4}
                             onChange={handleOption}
+                            // className='radio-btn'
                         />
                     </label>
                 </form>

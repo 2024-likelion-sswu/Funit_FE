@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import icon from '../../assets/img/character/purple.png'
 import Button from '../../components/Button'
+import { Link } from 'react-router-dom'
 
 const OnboardingPage2 = () => {
     const [nickname, setNickname] = useState('Guest');
@@ -15,7 +16,9 @@ const OnboardingPage2 = () => {
             <div className='guide'>
                 랜덤질문을 10개 미만으로 선택하면 직접 질문을 만들어야 돼요.
             </div>
-            <Button title='질문 만들러 가기' />
+            <Link to='/testCustom'>
+                <Button title='질문 만들러 가기' />
+            </Link>
         </div>
     )
 }
