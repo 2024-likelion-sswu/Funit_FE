@@ -121,9 +121,8 @@ const TestPage = () => {
     const currentQuestion = QuestionData[currentIndex]; 
     const remainingQuestions = totalQuestions - currentIndex;
 
-    // 진행률 계산 (링)
-    const radius = 50; // 링의 반지름
-    const circumference = 2 * Math.PI * radius; // 링의 둘레
+    const radius = 50; 
+    const circumference = 2 * Math.PI * radius; 
     const progress = (timeLeft / 15) * circumference;
 
     return (
@@ -141,41 +140,53 @@ const TestPage = () => {
                 </button>
             </div>
 
-        {/* 링과 남은 질문 개수 */}
+        
         <div className="progress-ring-container">
-        <p>{currentIndex + 1} / {totalQuestions}</p> {/* 남은 질문 개수 */}
+        <p>{currentIndex + 1} / {totalQuestions}</p> 
           <svg width="116.24" height="116.24">
-            {/* 링 배경 */}
-            <circle
-              cx="60"
-              cy="60"
-              r={radius}
-              stroke="#f5f5f5"
-              strokeWidth="10"
-              fill="none"
+          <circle
+            cx="58.12"
+            cy="58.12"
+            r={radius}
+            stroke="url(#gradient-bg)" 
+            strokeWidth="10"
+            fill="none"
             />
-            {/* 링 진행률 */}
+           
             <circle
-              cx="60"
-              cy="60"
-              r={radius}
-              stroke="#f28b82"
-              strokeWidth="10"
-              fill="none"
-              strokeDasharray={circumference}
-              strokeDashoffset={circumference - progress}
-              style={{ transition: "stroke-dashoffset 0.3s ease-in-out" }}
+            cx="58.12"
+            cy="58.12"
+            r={radius}
+            stroke="url(#gradient)" 
+            strokeWidth="10"
+            fill="none"
+            strokeDasharray={circumference}
+            strokeDashoffset={circumference - progress}
+            strokeLinecap="round" 
+            style={{ transition: "stroke-dashoffset 0.3s ease-in-out" }}
             />
-          </svg>
-          <p position= 'absolute' top='50%'  transform = 'translate(-50%, -50%)'>{timeLeft}초</p> {/* 남은 시간 */}
+            
+            <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#FF7F71" />
+                <stop offset="100%" stopColor="#FFAAAA" />
+            </linearGradient>
+            <radialGradient id="gradient-bg" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#FF7F71" />
+                <stop offset="100%" stopColor="#FCE4E4" />
+            </radialGradient>
+            </defs>
+        </svg>
+
+        <p className="time-left">{timeLeft}초</p>
         </div>
             <div className='question-container'>
                 <QuestionCreate 
-                            question={currentQuestion.question}
-                            option1={currentQuestion.option1}
-                            option2={currentQuestion.option2}
-                            option3={currentQuestion.option3}
-                            option4={currentQuestion.option4}
+                    question={currentQuestion.question}
+                    option1={currentQuestion.option1}
+                    option2={currentQuestion.option2}
+                    option3={currentQuestion.option3}
+                    option4={currentQuestion.option4}         
                 />            
             </div>    
         </div>
