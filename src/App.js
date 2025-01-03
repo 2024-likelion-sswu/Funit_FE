@@ -5,10 +5,11 @@ import NicknamePage from './pages/testCreatePage/NicknamePage'
 import OnboardingPage from './pages/testCreatePage/OnboardingPage'
 import TestCreatePage from './pages/testCreatePage/TestCreatePage'
 import OnboardingPage2 from './pages/testCreatePage/OnboardingPage2'
-import UrlF from './pages/mainPage/UrlFriend'
+import UrlF from './pages/testPage/UrlFriend'
 import Score1Page from './pages/testScorePage/Score1Page'
 import Score2Page from './pages/testScorePage/Score2Page'
 import Score3Page from './pages/testScorePage/Score3Page'
+import TestPage from './pages/testPage/TestPage'
 
 const App = () => {
     return (
@@ -23,6 +24,7 @@ const App = () => {
                 <Route path ='/score1' element={<Score1Page/>} />
                 <Route path ='/score2' element={<Score2Page/>} />
                 <Route path ='/score3' element={<Score3Page/>} />
+                <Route path ='/test' element={<TestPage/>} />
             </Routes>
         </BrowserRouter>
     )
