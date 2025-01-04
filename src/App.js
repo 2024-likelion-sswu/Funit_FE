@@ -11,6 +11,7 @@ import Score1Page from './pages/testScorePage/Score1Page'
 import Score2Page from './pages/testScorePage/Score2Page'
 import Score3Page from './pages/testScorePage/Score3Page'
 import TestPage from './pages/testPage/TestPage'
+import LetterReadPage from './pages/letterPage/LetterReadPage'
 
 const App = () => {
     return (
@@ -27,6 +28,7 @@ const App = () => {
                 <Route path ='/score2' element={<Score2Page/>} />
                 <Route path ='/score3' element={<Score3Page/>} />
                 <Route path ='/test' element={<TestPage/>} />
+                <Route path ='/letterRead' element={<LetterReadPage/>} />
             </Routes>
         </BrowserRouter>
     )
