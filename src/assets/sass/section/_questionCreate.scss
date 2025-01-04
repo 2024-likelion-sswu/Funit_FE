@@ -16,6 +16,13 @@
             font-size: 21px;
             margin-right: 6px;
         }
+
+        input {
+            border: 0;
+            font-weight: bold;
+            font-size: 16px;
+            color: #6A6A6E;
+        }
     }
 
     form {
@@ -42,12 +49,25 @@
                 flex: 1;
             }
 
-            input {
-                width: 22px;
-                height: 22px;
-                border-radius: 50%;
-                border: 1px solid #C7C7C7;
-                margin: 0;
+            textarea {
+                border: 0;
+                font-size: 16px;
+                font-weight: bold;
+                color: #6A6A6E;
+                width: 74px;
+                resize: none;
+                font-family: var(--mainfont);
+                padding: 0;
+                height: 24px;
+                line-height: 150%;
+
+                &::placeholder {
+                    color: #E3E3E3;
+                }
+
+                &:focus {
+                    outline-style: none;
+                }
             }
 
             input[type='radio'] {
@@ -60,6 +80,7 @@
                 border: 1px solid #C7C7C7;
                 outline: none;
                 cursor: pointer;
+                margin: 0 0 0 5px;
 
                 &:checked {
                     background-color: var(--maincolor);
