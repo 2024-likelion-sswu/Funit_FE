@@ -1,0 +1,114 @@
+.letter-create-container {
+
+    h2 {
+        margin-top: 33px;
+        margin-bottom: 21px;
+        font-size: 22px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .wrapper {
+        width: 341px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
+        margin: 0 auto;
+        height: calc(100vh - 107.36px - 87px);
+
+        .letter-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 7.77px;
+            width: 100%;
+
+            .letter-box {
+                position: relative;
+                width: 104.7px;
+                height: 140.92px;
+                border-radius: 7px;
+
+                .character-icon {
+                    position: absolute;
+                    width: 26.99px;
+                    bottom: 6.8px;
+                    left: 6.72px;
+                }
+
+                .check-icon {
+                    position: absolute;
+                    top: 7.77px;
+                    right: 10.56px;
+
+                }
+
+                &.pink {
+                    outline: 4px solid rgb(245, 24, 0, 0.3);
+                }
+
+                &.blue {
+                    outline: 4px solid rgba(37, 144, 182, 0.4);
+                }
+
+                &.yellow {
+                    outline: 4px solid rgb(240, 215, 24, 0.4);
+                }
+            }
+
+            .pink-box {
+                background-color: rgb(255, 127, 113, 0.3);
+            }
+
+            .blue-box {
+                background-color: rgb(179, 226, 225, 0.4);
+            }
+
+            .yellow-box {
+                background-color: rgb(255, 238, 177, 0.4);
+            }
+        }
+
+        .textarea-container {
+            height: 100%;
+            width: 100%;
+            position: relative;
+
+            .letter {
+                resize: none;
+                border-radius: 7px;
+                height: 100%;
+                width: 100%;
+                border: 0;
+                font-size: 18px;
+                font-weight: bold;
+                color: #6A6A6E;
+                font-family: var(--mainfont);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px 20px 130px 20px;
+    
+                &::placeholder {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #6A6A6E;
+                    font-family: var(--mainfont);
+                    text-align: center;
+                }
+
+                &:focus {
+                    outline: none;
+                }
+            }
+    
+            img {
+                position: absolute;
+                bottom: 22.16px;
+                left: 21.9px;
+                width: 87.91px;
+            }
+        }
+    }
+}
