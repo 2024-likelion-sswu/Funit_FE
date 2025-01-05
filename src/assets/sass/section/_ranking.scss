@@ -1,0 +1,116 @@
+.ranking-container {
+    text-align: left;
+    color: #1f2427;
+    font-weight: bold;
+    font-size: 18px;
+    padding-top: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    overflow: hidden;
+  
+    .ranking-header {
+      display: flex;
+      align-items: center; /* 이미지와 텍스트를 세로로 중앙 정렬 */
+      gap: 16px; /* 이미지와 텍스트 간격 */
+  
+      img {
+        width: 104px;
+        height: 103.61px;
+      }
+  
+      p {
+        font-size: 18px;
+        color: #1f2427;
+        margin: 0;
+        font-weight: bold;
+      }
+    }
+  
+    .ranking-list {
+      flex: 1;
+      overflow-y: auto;
+      margin-top: 20%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 33px;
+      width: 341px;
+      height: 84px;
+    }
+  
+    .ranking-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      border-radius: 12px;
+     
+  
+      &.rank-1 {
+        background-color: #ffe4e1;
+      }
+  
+      &.rank-2 {
+        background-color: #e1f5fe;
+      }
+  
+      &.rank-3 {
+        background-color: #fff9c4;
+      }
+      &.rank-4 {
+        background-color: #e6e6fa;
+      }
+      &.rank-5 {
+        background-color: #e1e1e1;
+      }
+  
+      .ranking-avatar img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+      }
+  
+      .ranking-details {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        margin-left: 16px;
+        text-align: left;
+        justify-content: space-between;
+            h1{
+                font-weight: bold;
+                font-size: 20px;
+                color:#1f2427
+            }
+    
+            .nickname {
+            font-size: 12px;
+            font-weight: bold;
+            color: #6a6a6e;
+            }
+        }
+  
+        .score {
+            font-size: 20px;
+            color: #6a6a6e;
+        }
+    }
+    
+    .fixed-footer{
+    
+        button {
+            position:absolute;
+            transform: translateX(-50%);
+            border-radius: 8px;
+            background-color: var(--maincolor);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--white);
+            width: 74px;
+            height: 48px;
+        }
+    }
+  }
+  

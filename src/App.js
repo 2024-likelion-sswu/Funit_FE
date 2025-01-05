@@ -14,6 +14,7 @@ import Score3Page from './pages/testScorePage/Score3Page'
 import TestPage from './pages/testPage/TestPage'
 import LetterReadPage from './pages/letterPage/LetterReadPage'
 import LetterCreatePage from './pages/letterPage/LetterCreatePage'
+import RankingPage from './pages/testScorePage/RankingPage'
 
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
                 <Route path ='/test' element={<TestPage/>} />
                 <Route path ='/letterRead' element={<LetterReadPage/>} />
                 <Route path ='/letterCreate' element={<LetterCreatePage/>} />
+                <Route path = '/ranking' element={<RankingPage/>}/>
             </Routes>
         </BrowserRouter>
     )
