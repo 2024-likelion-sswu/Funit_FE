@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-import Button from '../../components/Button';
 import icon from '../../assets/img/character/sad.png'
 
 const Score3Page = () => {

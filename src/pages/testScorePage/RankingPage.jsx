@@ -22,23 +22,28 @@ const RankingPage = () => {
   useEffect(() => {
     // 하드코딩된 임시 데이터
     const mockData = [
-      { testedByNickname: 'uniqueNick555', score: 9 },
-      { testedByNickname: 'uniqueNick333', score: 8 },
-      { testedByNickname: 'uniqueNick444', score: 0 },
-      { testedByNickname: 'uniqueNick777', score: 6 },
-      { testedByNickname: 'uniqueNick999', score: 4 },
-      { testedByNickname: 'uniqueNick999', score: 4 },
-      { testedByNickname: 'uniqueNick999', score: 4 },
+      { testedByNickname: '친구1', score: 9 },
+      { testedByNickname: '친구2', score: 8 },
+      { testedByNickname: 'k444', score: 0 },
+      { testedByNickname: '777', score: 6 },
+      { testedByNickname: '99', score: 4 },
+      { testedByNickname: '88', score: 4 },
+      { testedByNickname: '친구3', score: 4 },
     ];
 
     // rankings 상태 설정
     setRankings(mockData);
   }, []);
 
-  // 버튼 클릭 시 UrlSharePage로 이동
+  const handleLetterClick = (nickname) => {
+    navigate('/letterCreate', { state: { recipientNickname: nickname } });
+  };
+
+  // 테스트 공유 버튼 클릭 핸들러
   const handleShareClick = () => {
     navigate('/urlShare');
   };
+
 
   return (
     <div className='container ranking-container'>
@@ -60,10 +65,15 @@ const RankingPage = () => {
               />
             </div>
             <div className="ranking-details">
-              <p className="nickname">
-                ({nickname})님의 찐친!<br />
-                <h1>{rank.testedByNickname}</h1>
-              </p>
+              <div className="nickname-container">
+                <p className="nickname">
+                  ({nickname})님의 찐친!<br />
+                  <h1>{rank.testedByNickname}</h1>
+                </p>
+                <button className={`send-letter-btn ${rank.score >= 6 ? 'show' : ''}`} onClick={() => handleLetterClick(rank.testedByNickname)}>
+                  편지 보내기
+                </button>
+              </div>
               <p className="score"><span style={{color:"#FF7F71"}}>{rank.score}</span>점</p>
             </div>
           </div>
