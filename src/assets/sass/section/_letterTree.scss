@@ -1,0 +1,68 @@
+.letter-tree-container {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+  
+    .letter-header {
+      font-size: 22px;
+      font-weight: bold;
+      color: #1f2427;
+      margin-bottom: 20px;
+    }
+  
+    .tree-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  
+      .tree-image {
+        width: 330.16px; 
+        height: 505px;
+        align-items: center;
+      }
+  
+      .envelope-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+  
+        }
+        .envelope {
+            position: absolute;
+            cursor: pointer;
+        
+            /* 봉투 위치 지정 */
+            &.envelope-1 {
+              left: 38%; /* 트리 상단 왼쪽 */
+              top: 16%;
+              transform: translate(-50%, -50%);
+            }
+            &.envelope-2 {
+              left: 65%; /* 트리 상단 오른쪽 */
+              top: 25%;
+              transform: translate(-50%, -50%);
+            }
+            &.envelope-3 {
+              left: 30%; /* 트리 중단 왼쪽 */
+              top: 35%;
+              transform: translate(-50%, -50%);
+            }
+            &.envelope-4 {
+              left: 65%; /* 트리 중단 오른쪽 */
+              top: 40%;
+              transform: translate(-50%, -50%);
+            }
+            &.envelope-5 {
+              left: 42%; /* 트리 하단 중앙 */
+              top: 52%;
+              transform: translate(-50%, -50%);
+            }
+        }
+    }
+}
