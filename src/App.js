@@ -15,6 +15,7 @@ import TestPage from './pages/testPage/TestPage'
 import LetterReadPage from './pages/letterPage/LetterReadPage'
 import LetterCreatePage from './pages/letterPage/LetterCreatePage'
 import RankingPage from './pages/testScorePage/RankingPage'
+import LetterTreePage from './pages/letterPage/LetterTreePage'
 
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
                 <Route path ='/letterRead' element={<LetterReadPage/>} />
                 <Route path ='/letterCreate' element={<LetterCreatePage/>} />
                 <Route path = '/ranking' element={<RankingPage/>}/>
+                <Route path = '/tree' element={<LetterTreePage/>}/>
             </Routes>
         </BrowserRouter>
     )
