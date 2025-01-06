@@ -11,8 +11,8 @@ const Score1Page = () => {
             <h3>{nickname}님과 통하는 사이 !</h3>
             <img src={icon} alt="10점" />
             <div className='alert'>
-                <p>6점을 넘기면 친구에게 편지를 남길 수 있어요!</p>
-            <Button title="편지 쓰러 가기"/>
+                <p>6점을 넘기면 친구에게 편지를 받을 수 있어요!</p>
+            <Button title="받은 편지 확인하러 가기"/>
             </div>
         </div>
     )
