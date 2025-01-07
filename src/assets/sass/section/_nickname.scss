@@ -20,6 +20,7 @@
             width: 262px;
             height: 48px;
             text-align: center;
+            font-family: var(--mainfont);
 
             &::placeholder {
                 color: #525254;
@@ -37,7 +38,23 @@
             color: var(--white);
             width: 74px;
             height: 48px;
-
         }
+    }
+
+    .passsword-input {
+        width: 341px;
+        height: 48px;
+        margin-top: 14px;
+        border: 0;
+        text-align: center;
+        font-family: var(--mainfont);
+
+        &::placeholder {
+            color: #525254;
+            font-family: var(--mainfont);
+            line-height: 150%;
+            font-size: 14px;
+        }
+
     }
 }
