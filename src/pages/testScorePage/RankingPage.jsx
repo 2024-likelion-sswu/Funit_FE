@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Button from '../../components/Button';
 import icon from '../../assets/img/character/side.png';
 
@@ -20,26 +21,36 @@ const RankingPage = () => {
   const characterImages = [pink, skyblue, yelloweye,purpleeye, gray, mint];
 
   useEffect(() => {
-    // 하드코딩된 임시 데이터
-    const mockData = [
-      { testedByNickname: '친구1', score: 9 },
-      { testedByNickname: '친구2', score: 8 },
-      { testedByNickname: 'k444', score: 0 },
-      { testedByNickname: '777', score: 6 },
-      { testedByNickname: '99', score: 4 },
-      { testedByNickname: '88', score: 4 },
-      { testedByNickname: '친구3', score: 4 },
-    ];
+    const fetchUserNickname = async () => {
+      try {
+        const response = await axios.get('/api/users/me');
+        setNickname(response.data.nickname); // Update nickname with API response
+      } catch (error) {
+        console.error('Failed to fetch user nickname:', error);
+        if (error.response && error.response.status === 401) {
+          alert('인증되지 않은 사용자입니다. 로그인해주세요.');
+        }
+      }
+    };
 
-    // rankings 상태 설정
-    setRankings(mockData);
+    const fetchRankings = async () => {
+      try {
+        const response = await axios.get(`/api/record/leaderboard?createdBy=${1}`); // Replace '1' with the correct user ID if needed
+        setRankings(response.data);
+      } catch (error) {
+        console.error('Failed to fetch leaderboard rankings:', error);
+      }
+    };
+
+    fetchUserNickname();
+    fetchRankings();
   }, []);
+
 
   const handleLetterClick = (nickname) => {
     navigate('/letterCreate', { state: { recipientNickname: nickname } });
   };
 
-  // 테스트 공유 버튼 클릭 핸들러
   const handleShareClick = () => {
     navigate('/urlShare');
   };
