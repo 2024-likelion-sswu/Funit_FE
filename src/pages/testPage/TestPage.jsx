@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 import nextIcon from '../../assets/img/test/next.png'
 import backIcon from '../../assets/img/test/back.png'
 import QuestionCreate from '../../components/QuestionCreate'
@@ -7,83 +8,38 @@ import QuestionCreate from '../../components/QuestionCreate'
 const TestPage = () => {
     const navigate = useNavigate();
 
-    // 예시 데이터
-    const QuestionData = [
-        {
-            question: "가장 좋아하는 계절은?",
-            option1: "봄",
-            option2: "여름",
-            option3: "가을",
-            option4: "겨울"
-        },
-        {
-            question: "가장 좋아하는 음식은?",
-            option1: "치킨",
-            option2: "피자",
-            option3: "초밥",
-            option4: "떡볶이"
-        },
-        {
-            question: "가장 좋아하는 나라는?",
-            option1: "한국",
-            option2: "미국",
-            option3: "중국",
-            option4: "일본"
-        },
-        {
-            question: "가장 좋아하는 디저트는?",
-            option1: "아이스크림",
-            option2: "초콜릿",
-            option3: "마카롱",
-            option4: "케이크"
-        },
-        {
-            question: "가장 좋아하던 과목은?",
-            option1: "국어",
-            option2: "영어",
-            option3: "수학",
-            option4: "과학"
-        },
-        {
-            question: "가장 큰 장점은?",
-            option1: "유머감각",
-            option2: "배려심",
-            option3: "결단력",
-            option4: "추진력"
-        },
-        {
-            question: "가장 좋아하는 동물은?",
-            option1: "강아지",
-            option2: "고양이",
-            option3: "햄스터",
-            option4: "토끼"
-        },
-        {
-            question: "갖고싶은 초능력은?",
-            option1: "투명인간",
-            option2: "순간이동",
-            option3: "관심법",
-            option4: "공중부양"
-        },
-        {
-            question: "자주 쓰는 유행어는?",
-            option1: "ㄹㅇㅋㅋ",
-            option2: "어쩔티비",
-            option3: "느좋",
-            option4: "트민녀"
-        },
-        {
-            question: "영화 속 주인공이라면?",
-            option1: "해리포터",
-            option2: "아이언맨",
-            option3: "조커",
-            option4: "엘사"
-        }
-    ]
+    const [questions, setQuestions] = useState([]);
+    const [options, setOptions] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [answers, setAnswers] = useState(''); // 사용자가 선택한 답안
+    const [timeLeft, setTimeLeft] = useState(15);
+    const [loading, setLoading] = useState(true);
+    const [createdBy, setCreatedBy] = useState(null); // 테스트 주인의 userId
+    const totalQuestions = questions.length;
 
-    const [currentIndex, setCurrentIndex] = useState(0); 
-    const [timeLeft, setTimeLeft] = useState(15); 
-    const totalQuestions = QuestionData.length;
+    useEffect(() => {
+        const fetchUserAndTestData = async () => {
+            try {
+                // 테스트 주인의 userId 가져오기
+                const userResponse = await axios.get('https://dreamcatcherrr.store/api/users/me');
+                const userId = userResponse.data.id; // 테스트 주인의 userId
+                setCreatedBy(userId);
+
+                // 테스트 데이터 가져오기
+                const testResponse = await axios.get(`https://dreamcatcherrr.store/api/random_test/${userId}`);
+                setQuestions(testResponse.data.tests);
+                setOptions(testResponse.data.options);
+
+                setLoading(false);
+            } catch (error) {
+                console.error('Failed to fetch data:', error);
+                alert('데이터를 불러오는 데 실패했습니다.');
+                setLoading(false);
+            }
+        };
+        fetchUserAndTestData();
+    }, []);
+
 
       
     useEffect(() => {
@@ -100,11 +56,48 @@ const TestPage = () => {
     return () => clearInterval(timer); 
     }, [currentIndex]); 
 
-    
+    const handleAnswerSubmit = async () => {
+        try {
+            // 현재 로그인된 사용자의 userId 가져오기 (테스트를 보는 사람)
+            const testedByResponse = await axios.get('https://dreamcatcherrr.store/api/users/me');
+            const testedBy = testedByResponse.data.id;
+
+            // 답안 제출
+            await axios.post('https://dreamcatcherrr.store/api/record/answer', {
+                testedBy,
+                createdBy, // 테스트 주인의 userId 사용
+                answer: answers,
+            });
+
+            // 점수 요청
+            const scoreResponse = await axios.post('https://dreamcatcherrr.store/api/record/score', {
+                testedBy,
+                createdBy, // 테스트 주인의 userId 사용
+            });
+
+            const score = scoreResponse.data;
+
+            // 점수에 따라 페이지 이동
+            if (score = 10) {
+                navigate('/score1');
+            } else if (10 > score >= 6) {
+                navigate('/score2');
+            } else {
+                navigate('/score3');
+            }
+        } catch (error) {
+            console.error('Failed to submit answer or fetch score:', error);
+            alert('답안을 제출하거나 점수를 가져오는 데 실패했습니다.');
+        }
+    };
+
     const handleNext = () => {
         if (currentIndex < totalQuestions - 1) {
         setCurrentIndex(currentIndex + 1);
         setTimeLeft(15); 
+        }
+        else {
+            handleAnswerSubmit(); // 마지막 질문 이후 답안 제출 및 점수 요청
         }
     };
 
@@ -118,9 +111,6 @@ const TestPage = () => {
         }
     };
 
-    const currentQuestion = QuestionData[currentIndex]; 
-    const remainingQuestions = totalQuestions - currentIndex;
-
     const radius = 50; 
     const circumference = 2 * Math.PI * radius; 
     const progress = (timeLeft / 15) * circumference;
@@ -133,7 +123,7 @@ const TestPage = () => {
                     <p>이전</p>
                 </button>
                 <button className="arrow-btn"onClick={handleNext}
-                disabled={currentIndex === QuestionData.length - 1}
+                disabled={currentIndex === totalQuestions - 1}
                 >
                     <p>다음</p>
                     <img src={nextIcon} alt="다음"/>
@@ -182,15 +172,13 @@ const TestPage = () => {
         </div>
             <div className='question-container'>
                 <QuestionCreate 
-                    question={currentQuestion.question}
-                    option1={currentQuestion.option1}
-                    option2={currentQuestion.option2}
-                    option3={currentQuestion.option3}
-                    option4={currentQuestion.option4}         
+                    question={questions[currentIndex]}
+                    options={options[currentIndex]}
+                    onAnswerSelect={(answer) => setAnswers(prev => prev + answer)} // 답안 저장   
                 />            
             </div>    
         </div>
-        
+
     )
 }
 
