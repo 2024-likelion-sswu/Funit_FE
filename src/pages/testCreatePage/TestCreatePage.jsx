@@ -1,82 +1,47 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import nextIcon from '../../assets/img/test/next.png'
 import QuestionCreate from '../../components/QuestionCreate'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const TestCreatePage = () => {
+    const BASE_URL = 'https://dreamcatcherrr.store';
 
-    // 예시 데이터
-    const QuestionData = [
-        {
-            question: "가장 좋아하는 계절은?",
-            option1: "봄",
-            option2: "여름",
-            option3: "가을",
-            option4: "겨울"
-        },
-        {
-            question: "가장 좋아하는 음식은?",
-            option1: "치킨",
-            option2: "피자",
-            option3: "초밥",
-            option4: "떡볶이"
-        },
-        {
-            question: "가장 좋아하는 나라는?",
-            option1: "한국",
-            option2: "미국",
-            option3: "중국",
-            option4: "일본"
-        },
-        {
-            question: "가장 좋아하는 디저트는?",
-            option1: "아이스크림",
-            option2: "초콜릿",
-            option3: "마카롱",
-            option4: "케이크"
-        },
-        {
-            question: "가장 좋아하던 과목은?",
-            option1: "국어",
-            option2: "영어",
-            option3: "수학",
-            option4: "과학"
-        },
-        {
-            question: "가장 큰 장점은?",
-            option1: "유머감각",
-            option2: "배려심",
-            option3: "결단력",
-            option4: "추진력"
-        },
-        {
-            question: "가장 좋아하는 동물은?",
-            option1: "강아지",
-            option2: "고양이",
-            option3: "햄스터",
-            option4: "토끼"
-        },
-        {
-            question: "갖고싶은 초능력은?",
-            option1: "투명인간",
-            option2: "순간이동",
-            option3: "관심법",
-            option4: "공중부양"
-        },
-        {
-            question: "자주 쓰는 유행어는?",
-            option1: "ㄹㅇㅋㅋ",
-            option2: "어쩔티비",
-            option3: "느좋",
-            option4: "트민녀"
-        },
-        {
-            question: "영화 속 주인공이라면?",
-            option1: "해리포터",
-            option2: "아이언맨",
-            option3: "조커",
-            option4: "엘사"
+    const navigate = useNavigate();
+
+    const [userId, setUserId] = useState();
+    const [question, setQuestion] = useState([]); // 질문 생성자가 보게 되는 랜덤 질문 10개
+    const [selectedQuestion, setSelectedQuestion] = useState([]); // 질문 생성자가 선택한 질문과 답변
+    
+    const getId = async () => {
+        const nickname = localStorage.getItem('username');
+        if (nickname) {
+            const response = await axios.get(`${BASE_URL}/api/users/${nickname}`);
+            console.log('사용자 정보 조회 성공 : ', response.data);
+            setUserId(response.data.id);
+        } else {
+            alert('로그인이 필요합니다.');
+            navigate('/nickname');
         }
-    ]
+        
+    }
+
+    const getQuestion = async () => {
+        const response = await axios.get(`${BASE_URL}/api/questions`);
+        console.log('질문 20개 : ', response.data);
+        const temp = response.data;
+        for (let i = 0; i < 20; i++) {
+            const j = Math.floor(Math.random()*(i+1));
+            [temp[i], temp[j]] = [temp[j], temp[i]];
+        }
+        console.log('질문 20개 순서 섞기 : ',temp);
+        setQuestion(temp.slice(0,10));
+    }
+
+    useEffect(() => {
+        getId();
+        getQuestion();
+    },[]);
 
     return (
         <div className='container text-create-container'>
@@ -86,13 +51,14 @@ const TestCreatePage = () => {
                     <img src={nextIcon} alt="다음 아이콘" />
                 </button>
                 <div className='question-container'>
-                    {QuestionData.map((data,id) => 
+                    {question.map((data, id) => 
                         <QuestionCreate 
+                            key={id}
                             question={data.question}
-                            option1={data.option1}
-                            option2={data.option2}
-                            option3={data.option3}
-                            option4={data.option4}
+                            option1={data.optionList[0]}
+                            option2={data.optionList[1]}
+                            option3={data.optionList[2]}
+                            option4={data.optionList[3]}
                         />
                     )}
                 </div>
