@@ -12,38 +12,33 @@ import mint from '../../assets/img/character/mint.png';
 import purpleeye from '../../assets/img/character/purpleeye.png';
 
 const RankingPage = () => {
+
   const navigate = useNavigate();
 
-  // 임시 랭킹 데이터
-  const [rankings, setRankings] = useState([]);
-  const [nickname, setNickname] = useState('Guest');
+  const [rankings, setRankings] = useState([]); // 랭킹 데이터
+  const [nickname, setNickname] = useState(''); // 유저 닉네임
 
   const characterImages = [pink, skyblue, yelloweye,purpleeye, gray, mint];
 
   useEffect(() => {
-    const fetchUserNickname = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get('/api/users/me');
-        setNickname(response.data.nickname); // Update nickname with API response
+        // 유저 정보 가져오기
+        const userResponse = await axios.get('https://dreamcatcherrr.store/api/users/me');
+        const userId = userResponse.data.id;
+        setNickname(userResponse.data.nickname);
+
+        // 랭킹 데이터 가져오기
+        const rankingsResponse = await axios.get(`https://dreamcatcherrr.store/api/record/leaderboard?createdBy=${userId}`);
+        setRankings(rankingsResponse.data);
+
       } catch (error) {
-        console.error('Failed to fetch user nickname:', error);
-        if (error.response && error.response.status === 401) {
-          alert('인증되지 않은 사용자입니다. 로그인해주세요.');
-        }
+        console.error('Error fetching data:', error);
+        alert('데이터를 불러오는 중 문제가 발생했습니다.');
       }
     };
 
-    const fetchRankings = async () => {
-      try {
-        const response = await axios.get(`/api/record/leaderboard?createdBy=${1}`); // Replace '1' with the correct user ID if needed
-        setRankings(response.data);
-      } catch (error) {
-        console.error('Failed to fetch leaderboard rankings:', error);
-      }
-    };
-
-    fetchUserNickname();
-    fetchRankings();
+    fetchData();
   }, []);
 
 
