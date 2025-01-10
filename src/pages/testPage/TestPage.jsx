@@ -21,7 +21,7 @@ const TestPage = () => {
         const fetchUserAndTestData = async () => {
             try {
                 // 테스트 주인의 userId 가져오기
-                const userResponse = await axios.get('https://dreamcatcherrr.store/api/users/me');
+                const userResponse = await axios.get('https://dreamcatcherrr.store/api/auth/me');
                 const userId = userResponse.data.id; // 테스트 주인의 userId
                 setCreatedBy(userId);
 
@@ -59,7 +59,7 @@ const TestPage = () => {
     const handleAnswerSubmit = async () => {
         try {
             // 현재 로그인된 사용자의 userId 가져오기 (테스트를 보는 사람)
-            const testedByResponse = await axios.get('https://dreamcatcherrr.store/api/users/me');
+            const testedByResponse = await axios.get('https://dreamcatcherrr.store/api/auth/me');
             const testedBy = testedByResponse.data.id;
 
             // 답안 제출
