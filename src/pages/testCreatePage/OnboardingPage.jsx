@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import icon from '../../assets/img/character/purple.png'
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../apis/axiosInstance';
 
 const OnboardingPage = () => {
-    const BASE_URL = 'https://dreamcatcherrr.store';
 
     const [nickname, setNickname] = useState('Guest');
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const username = localStorage.getItem('username');
-        if (username) {
+    const getId = async () => {
+        try {
+            const username = localStorage.getItem('username');
+            console.log('사용자 이름 : ', username);
+            const response = await axiosInstance.get(`/api/users/${username}`);
             setNickname(username);
-        } else {
+            console.log('사용자 정보 조회 성공 : ', response.data);
+        } catch (error) {
+            console.error('로그인 상태 확인 실패 :', error);
             alert('로그인이 필요합니다.');
-            navigate('/');
+            navigate('/nickname');
         }
-    },[]);
+    };
+    
 
     useEffect(() => {
+        getId();
         const timer = setTimeout(() => {
             navigate('/testCreate');
         },2000);
