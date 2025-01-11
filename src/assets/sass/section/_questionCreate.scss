@@ -2,10 +2,11 @@
     background-color: var(--white);
     border-radius: 15px;
     padding: 12px 43px;
+    width: 353px;
 
     .question {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         color: #6A6A6E;
         font-size: 16px;
         font-weight: bold;
@@ -15,6 +16,7 @@
             color: var(--maincolor);
             font-size: 21px;
             margin-right: 6px;
+            line-height: 120%;
         }
 
         input {
@@ -32,6 +34,7 @@
         color: #6A6A6E;
         font-weight: bold;
         font-size: 16px;
+        width: 253px;
 
         label {
             border-radius: 10px;
