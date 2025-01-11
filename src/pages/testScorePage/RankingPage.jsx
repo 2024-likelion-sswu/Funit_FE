@@ -19,34 +19,39 @@ const RankingPage = () => {
 
   const characterImages = [pink, skyblue, yelloweye, purpleeye, gray, mint];
 
+  // 쿠키 값
+  const COOKIE_VALUE = 'JSESSIONID=B9890CE61180410FA1D911C8B048386E';
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token'); // Get token from localStorage
-
-        // Fetch user info
+        // 사용자 정보 요청
         const userResponse = await axios.get('https://dreamcatcherrr.store/api/auth/me', {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Cookie: COOKIE_VALUE, // 쿠키 값 추가
           },
-          withCredentials: true, // Include cookies
+          withCredentials: true, // 쿠키 포함
         });
 
         const userId = userResponse.data.id;
         setNickname(userResponse.data.nickname);
 
-        // Fetch ranking data
+        // 랭킹 데이터 요청
         const rankingsResponse = await axios.get(`https://dreamcatcherrr.store/api/record/leaderboard?createdBy=${userId}`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Cookie: COOKIE_VALUE, // 쿠키 값 추가
           },
-          withCredentials: true,
+          withCredentials: true, // 쿠키 포함
         });
 
         setRankings(rankingsResponse.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
-        alert('데이터를 불러오는 중 문제가 발생했습니다.');
+        if (error.response?.status === 401) {
+          alert('인증되지 않았습니다. 로그인 상태를 확인하세요.');
+        } else {
+          console.error('Error fetching data:', error);
+          alert('데이터를 불러오는 중 문제가 발생했습니다.');
+        }
       }
     };
 

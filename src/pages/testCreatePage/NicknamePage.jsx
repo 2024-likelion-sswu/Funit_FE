@@ -50,6 +50,7 @@ const NicknamePage = () => {
             });
             console.log('로그인 성공:', response.data);
             localStorage.setItem('username', nickname);
+            localStorage.setItem('sessionId', response.data.sessionId);
             navigate('/onboarding');
         } catch (error) {
             console.error('로그인 에러:', error);
