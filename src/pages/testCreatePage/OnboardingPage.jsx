@@ -6,7 +6,6 @@ import axiosInstance from '../../apis/axiosInstance';
 const OnboardingPage = () => {
 
     const [nickname, setNickname] = useState('Guest');
-
     const navigate = useNavigate();
 
     const getId = async () => {
@@ -23,7 +22,6 @@ const OnboardingPage = () => {
         }
     };
     
-
     useEffect(() => {
         getId();
         const timer = setTimeout(() => {
@@ -31,8 +29,7 @@ const OnboardingPage = () => {
         },2000);
 
         return() => clearTimeout(timer);
-    },[navigate]);
-
+    }, [navigate]);
 
     return (
         <div className='container onboarding-container'>
@@ -42,4 +39,4 @@ const OnboardingPage = () => {
     )
 }
 
-export default OnboardingPage
+export default OnboardingPage;
