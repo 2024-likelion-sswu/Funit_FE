@@ -10,7 +10,6 @@ const TestCustomPage = () => {
     const testCount = 10 - location.state.testCount;
 
     const [userId, setUserId] = useState();
-    // const userId = localStorage.getItem('userId')
     const getId = async () => { 
         const nickname = localStorage.getItem('username');
         if (nickname) {
@@ -53,19 +52,15 @@ const TestCustomPage = () => {
         }));
 
         try {
-            const data = {
-                userId,
-                tests: formattedQuestions.map((q) => q.question),
-                options: formattedQuestions.map((q) => q.options),
-                answers: formattedQuestions.map((q) => q.selectedAnswer),
-            }
-            console.log('data',data);
             console.log('userId',userId);
-            console.log('tests,',formattedQuestions.map((q) => q.question));
+            console.log('tests',formattedQuestions.map((q) => q.question));
             console.log('options',formattedQuestions.map((q) => q.options));
             console.log('answers',formattedQuestions.map((q) => q.selectedAnswer));
             const response = await axiosInstance.post('/api/plus_test', {
-                data
+                userId:userId,
+                tests: formattedQuestions.map((q) => q.question),
+                options: formattedQuestions.map((q) => q.options),
+                answers: formattedQuestions.map((q) => q.selectedAnswer),
             });
 
             console.log('테스트 생성 성공:', response.data);
