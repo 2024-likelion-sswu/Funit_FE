@@ -3,9 +3,10 @@ import icon from '../../assets/img/character/red.png'
 import copyIcon from '../../assets/img/test/copy.svg'
 
 const UrlSharePage = () => {
-    const [nickname, setNickname] = useState('Guest');
     const [isCopy, setIsCopy] = useState(false);
     const userId = localStorage.getItem('userId');
+
+    const nickname = localStorage.getItem('username');
 
     const copy = (text) => {
         try {
@@ -16,7 +17,6 @@ const UrlSharePage = () => {
             console.log('링크 복사에 실패하였습니다.')
         }
     };
-
     return (
         <div className='container url-share-container'>
             <img src={icon} alt="url 공유 페이지 아이콘" />
