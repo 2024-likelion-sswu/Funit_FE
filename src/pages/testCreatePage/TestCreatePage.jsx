@@ -68,7 +68,7 @@ const TestCreatePage = () => {
                 options: selectedQuestion.map(q => q.options),
                 answers: selectedQuestion.map(q => q.selectedAnswer),
             })
-            console.log('테스트 생성 성공 : ', response.data);
+            console.log('테스트 생성 성공 : ', response);
             console.log('질문 개수 : ', response.data.testCount);
             if (response.data.testCount<10) {
                 navigate('/onboarding2', { state: { testCount: response.data.testCount } });
