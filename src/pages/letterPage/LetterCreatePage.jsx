@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import Button from '../../components/Button'
 import checkPink from '../../assets/img/letter/checkPink.svg'
 import checkBlue from '../../assets/img/letter/checkBlue.svg'
@@ -6,9 +6,17 @@ import checkYellow from '../../assets/img/letter/checkYellow.svg'
 import iconPink from '../../assets/img/character/pink.png'
 import iconBlue from '../../assets/img/character/skyblue.png'
 import iconYellow from '../../assets/img/character/yelloweye.png'
+import axiosInstance from './../../apis/axiosInstance';
+import { useNavigate } from 'react-router-dom'
 
 const LetterCreatePage = () => {
     const [clickLetter, setClickLetter] = useState('pink');
+    const [content, setContent] = useState('');
+    const [receiverNickname, setReceiverNickname]= useState();
+
+    const navigate = useNavigate();
+
+    const senderNickname = localStorage.getItem('username');
 
     const handleLetter = (event) => {
         setClickLetter(event);
@@ -25,7 +33,29 @@ const LetterCreatePage = () => {
             default:
                 return 'rgb(255, 127, 113, 0.3)';
         }
-        
+    }
+
+    const submitLetter = async () => {
+        const paperColor = 
+            clickLetter === 'pink' ? 'red' :
+            clickLetter === 'blue' ? 'blue' :
+            clickLetter === 'yellow' ? 'yellow' : 'red';
+        console.log('편지지 색상 : ', paperColor);
+        console.log('편지 내용: ', content);
+        console.log('편지 보내는 사람', senderNickname);
+        console.log('편지 받는 사람 :', receiverNickname);
+        try {
+            const response = await axiosInstance.post('/api/letters', {
+                senderNickname:senderNickname,
+                // receiverNickname:receiverNickname,
+                content:content,
+                paperColor:paperColor,
+            });
+            console.log('편지 생성 : ', response);
+            navigate('/ranking');
+        } catch(error) {
+            console.log('편지 생성 오류 : ', error);
+        }
     }
 
     return (
@@ -35,10 +65,10 @@ const LetterCreatePage = () => {
                 <div className='letter-container'>
                     <div 
                         className={`letter-box pink-box ${clickLetter === 'pink' ? 'pink' : ''}`}
-                        onClick={() => handleLetter('pink')}
+                        onClick={() => handleLetter('red')}
                     >
                         <img src={iconPink} alt="pink icon" className='character-icon'/>
-                        {clickLetter === 'pink' && <img src={checkPink} alt="pink check" className='check-icon' />}
+                        {clickLetter === 'red' && <img src={checkPink} alt="pink check" className='check-icon' />}
                     </div>
                     <div 
                         className={`letter-box blue-box ${clickLetter === 'blue' ? 'blue' : ''}`}
@@ -60,15 +90,16 @@ const LetterCreatePage = () => {
                         className='letter'
                         placeholder='내용을 작성해주세요.'
                         style={{backgroundColor: handleLetterColor()}}
+                        onChange={(e) => setContent(e.target.value)}
                     >
                     </textarea>
-                    {clickLetter === 'pink' && <img src={iconPink} alt="편지 아이콘" />}
+                    {clickLetter === 'red' && <img src={iconPink} alt="편지 아이콘" />}
                     {clickLetter === 'blue' && <img src={iconBlue} alt="편지 아이콘" />}
                     {clickLetter === 'yellow' && <img src={iconYellow} alt="편지 아이콘" />}
                 </div>
                     
             </div>
-            <Button title='편지 보내기'/>
+            <Button title='편지 보내기' onClick={submitLetter}/>
         </div>
     )
 }
