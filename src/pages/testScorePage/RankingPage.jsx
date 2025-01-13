@@ -14,23 +14,22 @@ import purpleeye from '../../assets/img/character/purpleeye.png';
 const RankingPage = () => {
   const navigate = useNavigate();
 
-  const [rankings, setRankings] = useState([]); // Ranking data
-  const [nickname, setNickname] = useState(''); // User nickname
+  const [rankings, setRankings] = useState([]); 
+  const [nickname, setNickname] = useState(''); 
 
   const characterImages = [pink, skyblue, yelloweye, purpleeye, gray, mint];
 
-  // 쿠키 값
-  const COOKIE_VALUE = 'JSESSIONID=B9890CE61180410FA1D911C8B048386E';
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 사용자 정보 요청
+      
+        const sessionId = localStorage.getItem('sessionId');
         const userResponse = await axios.get('https://dreamcatcherrr.store/api/auth/me', {
           headers: {
-            Cookie: COOKIE_VALUE, // 쿠키 값 추가
+            Cookie: `JSESSIONID=${sessionId}`
           },
-          withCredentials: true, // 쿠키 포함
+          withCredentials: true, 
         });
 
         const userId = userResponse.data.id;
@@ -39,7 +38,7 @@ const RankingPage = () => {
         // 랭킹 데이터 요청
         const rankingsResponse = await axios.get(`https://dreamcatcherrr.store/api/record/leaderboard?createdBy=${userId}`, {
           headers: {
-            Cookie: COOKIE_VALUE, // 쿠키 값 추가
+            Cookie: `JSESSIONID=${sessionId}`
           },
           withCredentials: true, // 쿠키 포함
         });
@@ -114,3 +113,4 @@ const RankingPage = () => {
 };
 
 export default RankingPage;
+
