@@ -1,7 +1,7 @@
 .question-create-container {
     background-color: var(--white);
     border-radius: 15px;
-    padding: 12px 43px;
+    padding: 12px 50px;
     width: 353px;
 
     .question {
@@ -24,7 +24,12 @@
             font-weight: bold;
             font-size: 16px;
             color: #6A6A6E;
+            width: 100%;
         }
+    }
+
+    .option-container {
+        width: 253px;
     }
 
     form {

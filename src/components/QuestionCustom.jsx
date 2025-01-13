@@ -3,14 +3,14 @@ import React, { useState } from 'react';
 const QuestionCustom = ({ index, onChange }) => {
     const [question, setQuestion] = useState('');
     const [options, setOptions] = useState(['', '', '', '']);
-    const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null); // selectedAnswer를 인덱스로 저장
 
     const handleQuestionChange = (event) => {
         setQuestion(event.target.value);
         onChange({
             question: event.target.value,
             options,
-            selectedAnswer,
+            selectedAnswer: selectedAnswerIndex !== null ? options[selectedAnswerIndex] : null, // 인덱스를 이용해 선택된 답을 전달
         });
     };
 
@@ -21,16 +21,16 @@ const QuestionCustom = ({ index, onChange }) => {
         onChange({
             question,
             options: updatedOptions,
-            selectedAnswer,
+            selectedAnswer: selectedAnswerIndex !== null ? updatedOptions[selectedAnswerIndex] : null,
         });
     };
 
     const handleOptionClick = (index) => {
-        setSelectedAnswer(index);
+        setSelectedAnswerIndex(index);
         onChange({
             question,
             options,
-            selectedAnswer: index,
+            selectedAnswer: options[index],
         });
     };
 
@@ -67,8 +67,8 @@ const QuestionCustom = ({ index, onChange }) => {
                                 type="radio"
                                 name={`option${index}`}
                                 id={`option${index}-${idx}`}
-                                checked={selectedAnswer === idx && option !== ''}
-                                onChange={() => handleOptionClick(idx)}
+                                checked={selectedAnswerIndex === idx}  // 인덱스를 비교하여 체크
+                                onChange={() => handleOptionClick(idx)}  // 선택된 옵션의 인덱스를 저장
                             />
                         </label>
                     ))}
