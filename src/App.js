@@ -7,7 +7,7 @@ import TestCreatePage from './pages/testCreatePage/TestCreatePage'
 import OnboardingPage2 from './pages/testCreatePage/OnboardingPage2'
 import TestCustomPage from './pages/testCreatePage/TestCustomPage'
 import UrlSharePage from './pages/testCreatePage/UrlSharePage'
-import UrlF from './pages/testPage/UrlFriend'
+import UrlFriend from './pages/testPage/UrlFriend'
 import Score1Page from './pages/testScorePage/Score1Page'
 import Score2Page from './pages/testScorePage/Score2Page'
 import Score3Page from './pages/testScorePage/Score3Page'
@@ -28,11 +28,11 @@ const App = () => {
                 <Route path='/onboarding2' element={<OnboardingPage2 />} />
                 <Route path='/testCustom' element={<TestCustomPage />} />
                 <Route path='/urlShare' element={<UrlSharePage />} />
-                <Route path='/urlfriend' element={<UrlF />} />
+                <Route path="/test" element={<TestPage />} />
+                <Route path="/:userId" element={<UrlFriend />} /> 
                 <Route path ='/score1' element={<Score1Page/>} />
                 <Route path ='/score2' element={<Score2Page/>} />
                 <Route path ='/score3' element={<Score3Page/>} />
-                <Route path ='/test' element={<TestPage/>} />
                 <Route path ='/letterCreate' element={<LetterCreatePage/>} />
                 <Route path = '/ranking' element={<RankingPage/>}/>
                 <Route path = '/tree' element={<LetterTreePage/>}/>

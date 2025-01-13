@@ -5,7 +5,7 @@ import icon from '../../assets/img/character/mint.png'
 
 
 const UrlFriend = () => {
-    const [nickname, setNickname] = useState('Guest');
+    const [nickname, setNickname] = useState('vvvvv');
     const navigate = useNavigate();
 
     useEffect(() => {
