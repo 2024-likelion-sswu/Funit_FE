@@ -18,9 +18,9 @@ const TestPage = () => {
     useEffect(() => {
         const fetchTestData = async () => {
             try {
-                console.log(`Fetching test data for userId: ${userId}`);
+                console.log('Fetching test data for createdBy: 32');
 
-                const testResponse = await axiosInstance.get(`/api/random_test/${userId}`, {
+                const testResponse = await axiosInstance.get(`/api/random_test/32`, {
                     withCredentials: true,
                 });
                 console.log('테스트 데이터:', testResponse.data);
@@ -40,7 +40,7 @@ const TestPage = () => {
         };
 
         fetchTestData();
-    }, [navigate, userId]);
+    }, [navigate]);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -60,8 +60,8 @@ const TestPage = () => {
         try {
             // 현재 질문에 대한 답안 제출
             const answerPayload = {
-                testedBy: userId,
-                createdBy: userId, 
+                testedBy: 108, // testedBy는 108로 고정
+                createdBy: 32, // createdBy는 32로 고정
                 answer: selectedAnswer,
             };
             console.log('Submitting answer:', answerPayload);
@@ -94,7 +94,7 @@ const TestPage = () => {
 
     const handlePrev = () => {
         if (currentIndex === 0) {
-            navigate(`/urlfriend/${userId}`);
+            navigate(`/urlfriend/108`); // testedBy에 해당하는 경로로 리다이렉트
         } else {
             setCurrentIndex(currentIndex - 1);
             setTimeLeft(15);
@@ -105,8 +105,8 @@ const TestPage = () => {
         try {
             // 점수 요청
             const scorePayload = {
-                testedBy: userId,
-                createdBy: userId, 
+                testedBy: 108, // testedBy는 108로 고정
+                createdBy: 32, // createdBy는 32로 고정
             };
             console.log('Requesting score:', scorePayload);
 

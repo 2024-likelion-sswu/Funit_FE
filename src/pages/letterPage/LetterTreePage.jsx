@@ -12,7 +12,7 @@ const LetterTreePage = () => {
   const navigate = useNavigate();
 
 
-  const nickname = 'Guest';
+  const nickname = 'vvvvv';
   const receivedLetters = 5;
 
 

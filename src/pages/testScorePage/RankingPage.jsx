@@ -81,7 +81,7 @@ const RankingPage = () => {
             <div className="ranking-details">
               <div className="nickname-container">
                 <p className="nickname">
-                  ({nickname})님의 찐친!<br />
+                  {nickname}님의 찐친!<br />
                   <h1>{rank.testedByNickname}</h1>
                 </p>
                 <button

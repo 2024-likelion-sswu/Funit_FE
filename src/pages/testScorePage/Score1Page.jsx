@@ -4,38 +4,41 @@ import Button from '../../components/Button';
 import icon from '../../assets/img/character/mint.png';
 import axiosInstance from '../../apis/axiosInstance';
 
-
 const Score1Page = () => {
-    const { state } = useLocation();
-    const [score, setScore] = useState(state?.score || null); // 네비게이트로 전달된 점수
-    const [nickname, setNickname] = useState('');
+    const { state } = useLocation(); // 네비게이트로 전달된 state (점수, createdBy ID 등 포함)
+    const [score, setScore] = useState(state?.score || null); // 전달된 점수
+    const [nickname, setNickname] = useState(''); // testcreated의 닉네임
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchNicknameAndScore = async () => {
+        const fetchTestCreatorNickname = async () => {
             try {
-                const storedNickname = localStorage.getItem('username');
-                setNickname(storedNickname || 'Unknown');
-
-                if (score === null) {
-                    const userId = localStorage.getItem('userId');
-                    const response = await axiosInstance.post('/api/record/score', {
-                        testedBy: 3,
-                        createdBy: 104,
-                    });
-                    setScore(response.data);
+                if (!state?.createdBy) {
+                    console.error('createdBy 정보가 없습니다.');
+                    return;
                 }
+
+                // createdBy를 사용해 닉네임 가져오기
+                const response = await axiosInstance.get(`/api/users/${state.createdBy}`, {
+                    withCredentials: true,
+                });
+
+                const fetchedNickname = response.data.nickname; // API 응답에서 닉네임 추출
+                setNickname(fetchedNickname); // 닉네임 상태 업데이트
+                console.log('Fetched test creator nickname:', fetchedNickname);
             } catch (error) {
-                console.error('점수나 닉네임을 가져오는 중 오류 발생:', error.response || error);
+                console.error('testcreated 닉네임을 가져오는 중 오류 발생:', error.response || error);
                 alert('데이터를 불러오는 데 실패했습니다.');
             }
         };
 
-        fetchNicknameAndScore();
-    }, [score]);
+        fetchTestCreatorNickname();
+    }, [state?.createdBy]); // createdBy가 변경될 때마다 실행
+
     const handleButtonClick = () => {
         navigate('/tree'); 
     };
+
     return (
         <div className='container score-container'>
             <h2>
