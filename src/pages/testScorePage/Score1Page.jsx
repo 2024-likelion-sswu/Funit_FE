@@ -1,25 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../../components/Button';
 import icon from '../../assets/img/character/mint.png';
+import axiosInstance from '../../apis/axiosInstance';
 
 
 const Score1Page = () => {
-    const [score] = useState(10); 
-    const [nickname, setNickname] = useState(''); // 유저 닉네임
+    const [score, setScore] = useState(null); 
+    const [nickname, setNickname] = useState(''); 
 
     useEffect(() => {
-        const fetchNickname = async () => {
+        const fetchNicknameandScore = async () => {
             try {
                 const storedNickname = localStorage.getItem('username');
-                setNickname(storedNickname); // localStorage에 저장된 닉네임 사용
+                setNickname(storedNickname); 
                 
+                // 점수 가져오기
+                const scoreResponse = await axiosInstance.post('/api/record/score', {}, {
+                    withCredentials: true,
+                });
+
+                const fetchedScore = scoreResponse.data;
+                setScore(fetchedScore);
+
+                console.log('점수 가져오기 성공:', fetchedScore);
             } catch (error) {
-                console.error('닉네임을 가져오는 중 오류 발생:', error.response || error);
-                alert('닉네임을 가져오는 데 실패했습니다.');
+                console.error('점수나 닉네임을 가져오는 중 오류 발생:', error.response || error);
+                alert('데이터를 불러오는 데 실패했습니다.');
             }
         };
 
-        fetchNickname();
+        fetchNicknameandScore();
     }, []);
 
     return (
