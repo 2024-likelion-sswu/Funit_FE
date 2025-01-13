@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import Button from '../../components/Button';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../apis/axiosInstance';
@@ -44,13 +44,16 @@ const NicknamePage = () => {
                     password 
                 });
             }
+    
             const response = await axiosInstance.post('/api/auth/login', { 
                 nickname,
                 password 
             });
-            console.log('로그인 성공:', response.data);
+    
+            console.log('로그인 성공:', response);
+    
             localStorage.setItem('username', nickname);
-            
+            console.log('username = ', nickname);
             navigate('/onboarding');
         } catch (error) {
             console.error('로그인 에러:', error);

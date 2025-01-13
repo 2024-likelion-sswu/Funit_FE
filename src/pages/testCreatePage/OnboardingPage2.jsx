@@ -1,10 +1,28 @@
 import React, { useState } from 'react'
 import icon from '../../assets/img/character/purple.png'
 import Button from '../../components/Button'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import axiosInstance from '../../apis/axiosInstance'
 
 const OnboardingPage2 = () => {
+    const location = useLocation();
+    const testCount = location.state.testCount || 0;
+
+    const navigate = useNavigate();
+
     const [nickname, setNickname] = useState('Guest');
+    
+    const getName = async () => {
+        const nickname = localStorage.getItem('username');
+        if (nickname) {
+            const response = await axiosInstance.get(`/api/users/${nickname}`);
+            console.log('사용자 정보 조회 성공 : ', response.data);
+            setNickname(response.data.username);
+        } else {
+            alert('로그인이 필요합니다.');
+            navigate('/nickname');
+        }
+    }
     
     return (
         <div className='container onboarding2-container'>
@@ -16,7 +34,7 @@ const OnboardingPage2 = () => {
             <div className='guide'>
                 랜덤질문을 10개 미만으로 선택하면 직접 질문을 만들어야 돼요.
             </div>
-            <Link to='/testCustom'>
+            <Link to='/testCustom' state={{ testCount }}>
                 <Button title='질문 만들러 가기' />
             </Link>
         </div>

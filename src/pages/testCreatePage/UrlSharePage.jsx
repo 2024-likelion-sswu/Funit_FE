@@ -5,7 +5,7 @@ import copyIcon from '../../assets/img/test/copy.svg'
 const UrlSharePage = () => {
     const [nickname, setNickname] = useState('Guest');
     const [isCopy, setIsCopy] = useState(false);
-    
+    const userId = localStorage.getItem('userId');
 
     const copy = (text) => {
         try {
@@ -26,7 +26,10 @@ const UrlSharePage = () => {
                 친구에게 공유해 볼까요?
             </p>
             <div className='btn-wrapper'>
-                <button className='url-btn' onClick={() => copy(window.location.href)}>
+                <button className='url-btn' 
+                    // onClick={() => copy(window.location.href)}
+                        onClick={() => copy(`http://localhost:3000/${userId}`)}
+                    >
                     <p>URL</p>
                     <img src={copyIcon} alt="복사 아이콘" />
                 </button>
