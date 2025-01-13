@@ -7,57 +7,41 @@ import axiosInstance from '../../apis/axiosInstance';
 
 const TestPage = () => {
     const navigate = useNavigate();
-    const [userId, setUserId] = useState(null);
+    const [userId, setUserId] = useState(104); // userId 초기값을 104로 설정
     const [questions, setQuestions] = useState([]);
     const [options, setOptions] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [answers, setAnswers] = useState('');
+    const [answers, setAnswers] = useState([]);
     const [timeLeft, setTimeLeft] = useState(15);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchUserId = async () => {
+        const fetchUserIdAndTestData = async () => {
             try {
-                console.log('Fetching user ID...');
                 const storedNickname = localStorage.getItem('username');
-                if (!storedNickname) {
-                    alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
-                    navigate('/nickname');
-                    return;
-                }
+                const userResponse = await axiosInstance.get(`/api/users/${storedNickname}`);
+                const { id } = userResponse.data;
 
-                const response = await axiosInstance.get(`/api/users/${storedNickname}`);
-                const { id } = response.data;
-                console.log('User ID fetched:', id);
-                setUserId(id);
+                const effectiveUserId = 104 || id;
+                console.log('Effective User ID:', effectiveUserId);
+                setUserId(effectiveUserId);
 
-                // Fetch test data after getting user ID
-                fetchTestData(id);
-            } catch (error) {
-                console.error('Failed to fetch user ID:', error.response || error);
-                alert('사용자 정보를 가져오는 데 실패했습니다.');
-                navigate('/nickname'); // 로그인 페이지로 이동
-            }
-        };
-
-        const fetchTestData = async (id) => {
-            try {
-                console.log('Fetching test data for userId:', id);
-                const response = await axiosInstance.get(`/api/random_test/${id}`, {
+                const testResponse = await axiosInstance.get(`/api/random_test/${effectiveUserId}`, {
                     withCredentials: true,
                 });
-                console.log('테스트 데이터:', response.data);
-                setQuestions(response.data.tests);
-                setOptions(response.data.options);
+                console.log('테스트 데이터:', testResponse.data);
+
+                setQuestions(testResponse.data.tests || []);
+                setOptions(testResponse.data.options || []);
                 setLoading(false);
             } catch (error) {
-                console.error('테스트 데이터를 가져오는 중 에러 발생:', error.response || error);
-                alert('테스트 데이터를 불러오는 데 실패했습니다.');
-                setLoading(false);
+                console.error('Failed to fetch data:', error.response || error);
+                alert('데이터를 가져오는 데 실패했습니다. 다시 시도해주세요.');
+                navigate('/nickname');
             }
         };
 
-        fetchUserId();
+        fetchUserIdAndTestData();
     }, [navigate]);
 
     useEffect(() => {
@@ -74,42 +58,45 @@ const TestPage = () => {
         return () => clearInterval(timer);
     }, [currentIndex]);
 
-    const handleAnswerSubmit = async () => {
+    const handleNext = async () => {
         try {
-            console.log('Submitting answers:', answers);
-            // 답안 제출
+            const currentAnswer = answers[currentIndex];
+            console.log('Submitting answer for question:', questions[currentIndex]);
             await axiosInstance.post('/api/record/answer', {
-                answer: answers,
+                testedBy: userId,
+                createdBy: 104,
+                answer: currentAnswer,
             }, {
                 withCredentials: true,
             });
+            console.log('Answer submitted successfully for question:', currentIndex + 1);
 
-            // 점수 요청
-            const scoreResponse = await axiosInstance.post('/api/record/score', {}, {
-                withCredentials: true,
-            });
-
-            const score = scoreResponse.data;
-
-            if (score === 10) {
-                navigate('/score1');
-            } else if (score >= 6) {
-                navigate('/score2');
+            if (currentIndex < questions.length - 1) {
+                setCurrentIndex(currentIndex + 1);
+                setTimeLeft(15);
             } else {
-                navigate('/score3');
+                console.log('Fetching score after completing all questions...');
+                const scoreResponse = await axiosInstance.post('/api/record/score', {
+                    testedBy: userId,
+                    createdBy: 104,
+                }, {
+                    withCredentials: true,
+                });
+
+                const score = scoreResponse.data;
+                console.log('Final score received:', score);
+
+                if (score === 10) {
+                    navigate('/score1');
+                } else if (score >= 6) {
+                    navigate('/score2');
+                } else {
+                    navigate('/score3');
+                }
             }
         } catch (error) {
-            console.error('답안을 제출하거나 점수를 가져오는 데 실패했습니다:', error.response || error);
-            alert('답안을 제출하거나 점수를 가져오는 데 실패했습니다.');
-        }
-    };
-
-    const handleNext = () => {
-        if (currentIndex < questions.length - 1) {
-            setCurrentIndex(currentIndex + 1);
-            setTimeLeft(15);
-        } else {
-            handleAnswerSubmit();
+            console.error('Failed to submit answer or fetch score:', error.response || error);
+            alert('응답 제출 또는 점수 가져오는 데 실패했습니다.');
         }
     };
 
@@ -125,6 +112,11 @@ const TestPage = () => {
     const radius = 50;
     const circumference = 2 * Math.PI * radius;
     const progress = (timeLeft / 15) * circumference;
+
+    useEffect(() => {
+        console.log("현재 질문:", questions[currentIndex]);
+        console.log("현재 옵션:", options[currentIndex]);
+    }, [currentIndex, questions, options]);
 
     return (
         <div className='container test-container'>
@@ -179,9 +171,9 @@ const TestPage = () => {
                     <p>Loading...</p>
                 ) : (
                     <QuestionCreate
-                        question={questions[currentIndex]}
-                        options={options[currentIndex]}
-                        onAnswerSelect={(answer) => setAnswers((prev) => prev + answer)}
+                        question={questions[currentIndex]} 
+                        options={options[currentIndex] || []} 
+                        onAnswerSelect={(answer) => setAnswers((prev) => [...prev, answer])}
                     />
                 )}
             </div>
