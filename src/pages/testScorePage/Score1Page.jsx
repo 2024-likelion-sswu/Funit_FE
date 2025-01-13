@@ -1,38 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Button from '../../components/Button';
 import icon from '../../assets/img/character/mint.png';
 import axiosInstance from '../../apis/axiosInstance';
 
 
 const Score1Page = () => {
-    const [score, setScore] = useState(null); 
-    const [nickname, setNickname] = useState(''); 
+    const { state } = useLocation();
+    const [score, setScore] = useState(state?.score || null); // 네비게이트로 전달된 점수
+    const [nickname, setNickname] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchNicknameandScore = async () => {
+        const fetchNicknameAndScore = async () => {
             try {
                 const storedNickname = localStorage.getItem('username');
-                setNickname(storedNickname); 
-                
-               
-                const scoreResponse = await axiosInstance.post('/api/record/score', {}, {
-                    withCredentials: true,
-                });
+                setNickname(storedNickname || 'Unknown');
 
-                const fetchedScore = scoreResponse.data;
-                setScore(fetchedScore);
-
-                console.log('점수 가져오기 성공:', fetchedScore);
+                if (score === null) {
+                    const userId = localStorage.getItem('userId');
+                    const response = await axiosInstance.post('/api/record/score', {
+                        testedBy: 3,
+                        createdBy: 104,
+                    });
+                    setScore(response.data);
+                }
             } catch (error) {
                 console.error('점수나 닉네임을 가져오는 중 오류 발생:', error.response || error);
                 alert('데이터를 불러오는 데 실패했습니다.');
             }
         };
 
-        fetchNicknameandScore();
-    }, []);
+        fetchNicknameAndScore();
+    }, [score]);
     const handleButtonClick = () => {
         navigate('/tree'); 
     };

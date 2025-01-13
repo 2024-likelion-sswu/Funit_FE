@@ -7,7 +7,7 @@ import axiosInstance from '../../apis/axiosInstance';
 
 const TestPage = () => {
     const navigate = useNavigate();
-    const [userId, setUserId] = useState(104); // userId 초기값을 104로 설정
+    const [userId] = useState(104); // 고정된 userId 104
     const [questions, setQuestions] = useState([]);
     const [options, setOptions] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -16,33 +16,30 @@ const TestPage = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchUserIdAndTestData = async () => {
+        const fetchTestData = async () => {
             try {
-                const storedNickname = localStorage.getItem('username');
-                const userResponse = await axiosInstance.get(`/api/users/${storedNickname}`);
-                const { id } = userResponse.data;
-
-                const effectiveUserId = 104 || id;
-                console.log('Effective User ID:', effectiveUserId);
-                setUserId(effectiveUserId);
-
-                const testResponse = await axiosInstance.get(`/api/random_test/${effectiveUserId}`, {
+                // 104번 사용자의 테스트 데이터 가져오기
+                const testResponse = await axiosInstance.get(`/api/random_test/${userId}`, {
                     withCredentials: true,
                 });
                 console.log('테스트 데이터:', testResponse.data);
 
-                setQuestions(testResponse.data.tests || []);
-                setOptions(testResponse.data.options || []);
+                // 질문과 옵션에서 최대 10개만 가져오기
+                const fetchedQuestions = testResponse.data.tests.slice(0, 10);
+                const fetchedOptions = testResponse.data.options.slice(0, 10);
+
+                setQuestions(fetchedQuestions);
+                setOptions(fetchedOptions);
                 setLoading(false);
             } catch (error) {
-                console.error('Failed to fetch data:', error.response || error);
+                console.error('Failed to fetch test data:', error.response || error);
                 alert('데이터를 가져오는 데 실패했습니다. 다시 시도해주세요.');
-                navigate('/nickname');
+                navigate('/nickname'); 
             }
         };
 
-        fetchUserIdAndTestData();
-    }, [navigate]);
+        fetchTestData();
+    }, [navigate, userId]);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -58,45 +55,39 @@ const TestPage = () => {
         return () => clearInterval(timer);
     }, [currentIndex]);
 
-    const handleNext = async () => {
+    const handleAnswerSubmit = async (selectedAnswer) => {
         try {
-            const currentAnswer = answers[currentIndex];
-            console.log('Submitting answer for question:', questions[currentIndex]);
-            await axiosInstance.post('/api/record/answer', {
-                testedBy: userId,
-                createdBy: 104,
-                answer: currentAnswer,
-            }, {
+            // 현재 질문에 대한 답안 제출
+            const answerPayload = {
+                testedBy: 3,
+                createdBy: 104, 
+                answer: selectedAnswer,
+            };
+            console.log('Submitting answer:', answerPayload);
+
+            await axiosInstance.post('/api/record/answer', answerPayload, {
                 withCredentials: true,
             });
-            console.log('Answer submitted successfully for question:', currentIndex + 1);
 
-            if (currentIndex < questions.length - 1) {
-                setCurrentIndex(currentIndex + 1);
-                setTimeLeft(15);
-            } else {
-                console.log('Fetching score after completing all questions...');
-                const scoreResponse = await axiosInstance.post('/api/record/score', {
-                    testedBy: userId,
-                    createdBy: 104,
-                }, {
-                    withCredentials: true,
-                });
-
-                const score = scoreResponse.data;
-                console.log('Final score received:', score);
-
-                if (score === 10) {
-                    navigate('/score1');
-                } else if (score >= 6) {
-                    navigate('/score2');
-                } else {
-                    navigate('/score3');
-                }
-            }
+            console.log('Answer submitted successfully.');
         } catch (error) {
-            console.error('Failed to submit answer or fetch score:', error.response || error);
-            alert('응답 제출 또는 점수 가져오는 데 실패했습니다.');
+            console.error('답안을 제출하는 데 실패했습니다:', error.response || error);
+            alert('답안을 제출하는 데 실패했습니다.');
+        }
+    };
+
+    const handleNext = async () => {
+        const currentAnswer = answers[currentIndex];
+        if (currentAnswer) {
+            await handleAnswerSubmit(currentAnswer); // 현재 질문의 답안 제출
+        }
+
+        if (currentIndex < questions.length - 1) {
+            setCurrentIndex(currentIndex + 1);
+            setTimeLeft(15);
+        } else {
+            // 마지막 질문인 경우 점수를 요청
+            handleScoreRequest();
         }
     };
 
@@ -109,14 +100,45 @@ const TestPage = () => {
         }
     };
 
+    const handleScoreRequest = async () => {
+        try {
+            // 점수 요청
+            const scorePayload = {
+                testedBy: 3,
+                createdBy: 104,
+            };
+            console.log('Requesting score:', scorePayload);
+
+            const scoreResponse = await axiosInstance.post('/api/record/score', scorePayload, {
+                withCredentials: true,
+            });
+
+            const score = scoreResponse.data;
+
+            console.log('Score received:', score);
+
+            if (score === 10) {
+                navigate('/score1', { state: { score } });
+            } else if (score >= 6) {
+                navigate('/score2', { state: { score } });
+            } else {
+                navigate('/score3', { state: { score } });
+            }
+        } catch (error) {
+            console.error('점수를 요청하는 데 실패했습니다:', error.response || error);
+            alert('점수를 요청하는 데 실패했습니다.');
+        }
+    };
+
+    const handleAnswerSelect = (answer) => {
+        const updatedAnswers = [...answers];
+        updatedAnswers[currentIndex] = answer;
+        setAnswers(updatedAnswers);
+    };
+
     const radius = 50;
     const circumference = 2 * Math.PI * radius;
     const progress = (timeLeft / 15) * circumference;
-
-    useEffect(() => {
-        console.log("현재 질문:", questions[currentIndex]);
-        console.log("현재 옵션:", options[currentIndex]);
-    }, [currentIndex, questions, options]);
 
     return (
         <div className='container test-container'>
@@ -125,8 +147,8 @@ const TestPage = () => {
                     <img src={backIcon} alt="이전" onClick={handlePrev} />
                     <p>이전</p>
                 </button>
-                <button className="arrow-btn" onClick={handleNext} disabled={currentIndex === questions.length - 1}>
-                    <p>다음</p>
+                <button className="arrow-btn" onClick={handleNext}>
+                    <p>{currentIndex === questions.length - 1 ? "제출" : "다음"}</p>
                     <img src={nextIcon} alt="다음" />
                 </button>
             </div>
@@ -172,8 +194,11 @@ const TestPage = () => {
                 ) : (
                     <QuestionCreate
                         question={questions[currentIndex]} 
-                        options={options[currentIndex] || []} 
-                        onAnswerSelect={(answer) => setAnswers((prev) => [...prev, answer])}
+                        option1={options[currentIndex]?.[0] || ''} 
+                        option2={options[currentIndex]?.[1] || ''} 
+                        option3={options[currentIndex]?.[2] || ''} 
+                        option4={options[currentIndex]?.[3] || ''} 
+                        onAnswerSelect={handleAnswerSelect}
                     />
                 )}
             </div>
