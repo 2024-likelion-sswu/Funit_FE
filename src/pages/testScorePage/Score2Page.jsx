@@ -1,10 +1,24 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react';
 import Button from '../../components/Button';
 import icon from '../../assets/img/character/purpleeye.png'
 
 const Score2Page = () => {
-    const [score, setScore] = useState(6); 
-    const [nickname, setNickname] = useState('Guest');
+    const [score] = useState(6); 
+    const [nickname, setNickname] = useState('');
+        useEffect(() => {
+            const fetchNickname = async () => {
+                try {
+                    const storedNickname = localStorage.getItem('username');
+                    setNickname(storedNickname); 
+                    
+                } catch (error) {
+                    console.error('닉네임을 가져오는 중 오류 발생:', error.response || error);
+                    alert('닉네임을 가져오는 데 실패했습니다.');
+                }
+            };
+    
+            fetchNickname();
+        }, []);
     return (
         <div className='container score-container'>
             <h2><span style={{color:"#FF7F71"}}>{score}</span>점</h2>
