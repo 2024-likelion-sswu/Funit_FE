@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Button from '../../components/Button';
 import icon from '../../assets/img/character/side.png';
+import axiosInstance from '../../apis/axiosInstance';
 
 import pink from '../../assets/img/character/pink.png';
 import skyblue from '../../assets/img/character/skyblue.png';
@@ -14,48 +14,44 @@ import purpleeye from '../../assets/img/character/purpleeye.png';
 const RankingPage = () => {
   const navigate = useNavigate();
 
-  const [rankings, setRankings] = useState([]); 
-  const [nickname, setNickname] = useState(''); 
+  const [rankings, setRankings] = useState([]); // 랭킹 데이터
+  const [nickname, setNickname] = useState(''); // 유저 닉네임
+  const [userId, setUserId] = useState(null); // 유저 ID
 
   const characterImages = [pink, skyblue, yelloweye, purpleeye, gray, mint];
 
-
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUserData = async () => {
       try {
-      
-        const sessionId = localStorage.getItem('sessionId');
-        const userResponse = await axios.get('https://dreamcatcherrr.store/api/auth/me', {
-          headers: {
-            Cookie: `JSESSIONID=${sessionId}`
-          },
-          withCredentials: true, 
-        });
+        console.log('Fetching user ID using nickname...');
+        // 닉네임 가져오기 (localStorage에서 저장된 값 사용)
+        const storedNickname = localStorage.getItem('username');
+        if (!storedNickname) {
+          alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
+          navigate('/nickname');
+          return;
+        }
+        setNickname(storedNickname);
 
-        const userId = userResponse.data.id;
-        setNickname(userResponse.data.nickname);
+        // 닉네임을 사용하여 유저 ID 가져오기
+        const userResponse = await axiosInstance.get(`/api/users/${storedNickname}`);
+        const fetchedUserId = userResponse.data.id;
+        console.log('User ID fetched:', fetchedUserId);
+        setUserId(fetchedUserId);
 
-        // 랭킹 데이터 요청
-        const rankingsResponse = await axios.get(`https://dreamcatcherrr.store/api/record/leaderboard?createdBy=${userId}`, {
-          headers: {
-            Cookie: `JSESSIONID=${sessionId}`
-          },
-          withCredentials: true, // 쿠키 포함
-        });
-
+        // 랭킹 데이터 가져오기
+        console.log('Fetching rankings...');
+        const rankingsResponse = await axiosInstance.get(`/api/record/leaderboard?createdBy=${fetchedUserId}`);
+        console.log('Rankings fetched successfully:', rankingsResponse.data);
         setRankings(rankingsResponse.data);
       } catch (error) {
-        if (error.response?.status === 401) {
-          alert('인증되지 않았습니다. 로그인 상태를 확인하세요.');
-        } else {
-          console.error('Error fetching data:', error);
-          alert('데이터를 불러오는 중 문제가 발생했습니다.');
-        }
+        console.error('Error fetching data:', error);
+        alert('데이터를 불러오는 중 문제가 발생했습니다.');
       }
     };
 
-    fetchData();
-  }, []);
+    fetchUserData();
+  }, [navigate]);
 
   const handleLetterClick = (nickname) => {
     navigate('/letterCreate', { state: { recipientNickname: nickname } });
@@ -75,15 +71,12 @@ const RankingPage = () => {
         </p>
       </div>
 
-      {/* Ranking list */}
+      {/* 랭킹 리스트 */}
       <div className="ranking-list">
         {rankings.map((rank, index) => (
           <div key={index} className={`ranking-item rank-${index + 1}`}>
             <div className="ranking-avatar">
-              <img
-                src={characterImages[index % characterImages.length]}
-                alt="캐릭터 이미지"
-              />
+              <img src={characterImages[index % characterImages.length]} alt="캐릭터 이미지" />
             </div>
             <div className="ranking-details">
               <div className="nickname-container">
@@ -113,4 +106,3 @@ const RankingPage = () => {
 };
 
 export default RankingPage;
-
