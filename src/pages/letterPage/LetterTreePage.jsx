@@ -83,7 +83,7 @@ const LetterTreePage = () => {
             <div className='letter-container'>
               <div className='letter'>
                 <div className='letter-content'>
-                안녕, [닉네임]! <br /><br />요즘 어떻게 지내? <br />네가 좋아하는 테니스는 잘하고 있겠지?<br /><br /> 나는 요즘 열심히 공부 하면서 지내고 있어. 가끔 네가 생각날 때마다 예전에 함께했던 추억들이 떠오르더라. 그때 많이 웃고 즐거웠던 기억이 참 소중하게 느껴져.<br /><br /> 조만간 우리 꼭 만나서 맛있는 거 먹고 이야기 나누자! 나도 곧 테스트 만들 테니까 기대해! 😄
+                안녕, vvvvv! <br /><br />요즘 어떻게 지내? <br />네가 좋아하는 테니스는 잘하고 있겠지?<br /><br /> 나는 요즘 열심히 공부 하면서 지내고 있어. 가끔 네가 생각날 때마다 예전에 함께했던 추억들이 떠오르더라. 그때 많이 웃고 즐거웠던 기억이 참 소중하게 느껴져.<br /><br /> 조만간 우리 꼭 만나서 맛있는 거 먹고 이야기 나누자! 나도 곧 테스트 만들 테니까 기대해! 😄
                 </div>
                 <div className='letter-bottom'>
                   <img src={iconPink} alt="편지지 아이콘" />
