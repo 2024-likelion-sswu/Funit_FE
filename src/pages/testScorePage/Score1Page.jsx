@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
 import icon from '../../assets/img/character/mint.png';
 import axiosInstance from '../../apis/axiosInstance';
@@ -7,6 +8,7 @@ import axiosInstance from '../../apis/axiosInstance';
 const Score1Page = () => {
     const [score, setScore] = useState(null); 
     const [nickname, setNickname] = useState(''); 
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchNicknameandScore = async () => {
@@ -14,7 +16,7 @@ const Score1Page = () => {
                 const storedNickname = localStorage.getItem('username');
                 setNickname(storedNickname); 
                 
-                // 점수 가져오기
+               
                 const scoreResponse = await axiosInstance.post('/api/record/score', {}, {
                     withCredentials: true,
                 });
@@ -31,7 +33,9 @@ const Score1Page = () => {
 
         fetchNicknameandScore();
     }, []);
-
+    const handleButtonClick = () => {
+        navigate('/tree'); 
+    };
     return (
         <div className='container score-container'>
             <h2>
@@ -41,7 +45,7 @@ const Score1Page = () => {
             <img src={icon} alt="10점" />
             <div className='alert'>
                 <p>6점을 넘기면 친구에게 편지를 받을 수 있어요!</p>
-                <Button title="받은 편지 확인하러 가기" />
+                <Button title="받은 편지 확인하러 가기" onClick={handleButtonClick}/>
             </div>
         </div>
     );

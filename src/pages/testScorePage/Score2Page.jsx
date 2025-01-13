@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
 import icon from '../../assets/img/character/purpleeye.png'
 
 const Score2Page = () => {
     const [score] = useState(6); 
     const [nickname, setNickname] = useState('');
+    const navigate = useNavigate();
         useEffect(() => {
             const fetchNickname = async () => {
                 try {
@@ -19,6 +21,9 @@ const Score2Page = () => {
     
             fetchNickname();
         }, []);
+        const handleButtonClick = () => {
+            navigate('/tree'); 
+        };
     return (
         <div className='container score-container'>
             <h2><span style={{color:"#FF7F71"}}>{score}</span>점</h2>
@@ -26,7 +31,7 @@ const Score2Page = () => {
             <img src={icon} alt="6점" />
             <div className='alert'>
                 <p>6점을 넘기면 친구에게 편지를 받을 수 있어요!</p>
-            <Button title="받은 편지 확인하러 가기"/>
+            <Button title="받은 편지 확인하러 가기" onClick={handleButtonClick}/>
             </div>
         </div>
     )
