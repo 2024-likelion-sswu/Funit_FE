@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
 import nextIcon from '../../assets/img/test/next.png';
 import backIcon from '../../assets/img/test/back.png';
 import QuestionCreate from '../../components/QuestionCreate';
+import axiosInstance from '../../apis/axiosInstance';
 
 const TestPage = () => {
     const navigate = useNavigate();
-
+    const [userId, setUserId] = useState(null);
     const [questions, setQuestions] = useState([]);
     const [options, setOptions] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -16,87 +16,76 @@ const TestPage = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchTestData = async () => {
+        const fetchUserId = async () => {
             try {
-                console.log('fetchTestData 함수 실행됨');
-                
-                const sessionId = localStorage.getItem('sessionId');
-                if (!sessionId) {
-                    console.error('sessionId가 없습니다. 로그인 후 다시 시도하세요.');
+                console.log('Fetching user ID...');
+                const storedNickname = localStorage.getItem('username');
+                if (!storedNickname) {
+                    alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
+                    navigate('/nickname');
                     return;
                 }
-    
-                console.log('Axios 요청 전');
-                const userResponse = await axios.get('https://dreamcatcherrr.store/api/auth/me', {
-                    headers: {
-                        Cookie: `JSESSIONID=${sessionId}`,
-                    },
+
+                const response = await axiosInstance.get(`/api/users/${storedNickname}`);
+                const { id } = response.data;
+                console.log('User ID fetched:', id);
+                setUserId(id);
+
+                // Fetch test data after getting user ID
+                fetchTestData(id);
+            } catch (error) {
+                console.error('Failed to fetch user ID:', error.response || error);
+                alert('사용자 정보를 가져오는 데 실패했습니다.');
+                navigate('/nickname'); // 로그인 페이지로 이동
+            }
+        };
+
+        const fetchTestData = async (id) => {
+            try {
+                console.log('Fetching test data for userId:', id);
+                const response = await axiosInstance.get(`/api/random_test/${id}`, {
                     withCredentials: true,
                 });
-    
-                const userId = userResponse.data.id;
-                console.log('User ID:', userId);
-    
-                const testResponse = await axios.get(`https://dreamcatcherrr.store/api/random_test/${userId}`, {
-                    headers: {
-                        Cookie: `JSESSIONID=${sessionId}`,
-                    },
-                    withCredentials: true,
-                });
-    
-                console.log('테스트 데이터:', testResponse.data);
-                setQuestions(testResponse.data.tests);
-                setOptions(testResponse.data.options);
+                console.log('테스트 데이터:', response.data);
+                setQuestions(response.data.tests);
+                setOptions(response.data.options);
                 setLoading(false);
             } catch (error) {
-                console.error('Failed to fetch test data:', error.response || error);
-                alert('데이터를 불러오는 데 실패했습니다.');
+                console.error('테스트 데이터를 가져오는 중 에러 발생:', error.response || error);
+                alert('테스트 데이터를 불러오는 데 실패했습니다.');
                 setLoading(false);
             }
         };
-    
-        fetchTestData();
-    }, []);
-    
-    
+
+        fetchUserId();
+    }, [navigate]);
 
     useEffect(() => {
         const timer = setInterval(() => {
             setTimeLeft((prev) => {
                 if (prev === 1) {
-                    handleNext(); 
-                    return 15; 
+                    handleNext();
+                    return 15;
                 }
                 return prev - 1;
             });
         }, 1000);
 
-        return () => clearInterval(timer); 
-    }, [currentIndex]); 
+        return () => clearInterval(timer);
+    }, [currentIndex]);
 
     const handleAnswerSubmit = async () => {
         try {
-            const sessionId = localStorage.getItem('sessionId');
-            if (!sessionId) {
-                alert('세션 ID가 없습니다. 로그인 후 다시 시도하세요.');
-                return;
-            }
-
+            console.log('Submitting answers:', answers);
             // 답안 제출
-            await axios.post('https://dreamcatcherrr.store/api/record/answer', {
+            await axiosInstance.post('/api/record/answer', {
                 answer: answers,
             }, {
-                headers: {
-                    Cookie: `JSESSIONID=${sessionId}`,
-                },
                 withCredentials: true,
             });
 
             // 점수 요청
-            const scoreResponse = await axios.post('https://dreamcatcherrr.store/api/record/score', {}, {
-                headers: {
-                    Cookie: `JSESSIONID=${sessionId}`,
-                },
+            const scoreResponse = await axiosInstance.post('/api/record/score', {}, {
                 withCredentials: true,
             });
 
@@ -110,7 +99,7 @@ const TestPage = () => {
                 navigate('/score3');
             }
         } catch (error) {
-            console.error('Failed to submit answer or fetch score:', error);
+            console.error('답안을 제출하거나 점수를 가져오는 데 실패했습니다:', error.response || error);
             alert('답안을 제출하거나 점수를 가져오는 데 실패했습니다.');
         }
     };
@@ -118,7 +107,7 @@ const TestPage = () => {
     const handleNext = () => {
         if (currentIndex < questions.length - 1) {
             setCurrentIndex(currentIndex + 1);
-            setTimeLeft(15); 
+            setTimeLeft(15);
         } else {
             handleAnswerSubmit();
         }
@@ -126,15 +115,15 @@ const TestPage = () => {
 
     const handlePrev = () => {
         if (currentIndex === 0) {
-            navigate("/urlfriend"); 
+            navigate("/urlfriend");
         } else {
             setCurrentIndex(currentIndex - 1);
-            setTimeLeft(15); 
+            setTimeLeft(15);
         }
     };
 
-    const radius = 50; 
-    const circumference = 2 * Math.PI * radius; 
+    const radius = 50;
+    const circumference = 2 * Math.PI * radius;
     const progress = (timeLeft / 15) * circumference;
 
     return (
@@ -146,17 +135,17 @@ const TestPage = () => {
                 </button>
                 <button className="arrow-btn" onClick={handleNext} disabled={currentIndex === questions.length - 1}>
                     <p>다음</p>
-                    <img src={nextIcon} alt="다음"/>
+                    <img src={nextIcon} alt="다음" />
                 </button>
             </div>
             <div className="progress-ring-container">
-                <p>{currentIndex + 1} / {questions.length}</p> 
+                <p>{currentIndex + 1} / {questions.length}</p>
                 <svg width="116.24" height="116.24">
                     <circle
                         cx="58.12"
                         cy="58.12"
                         r={radius}
-                        stroke="url(#gradient-bg)" 
+                        stroke="url(#gradient-bg)"
                         strokeWidth="10"
                         fill="none"
                     />
@@ -164,16 +153,16 @@ const TestPage = () => {
                         cx="58.12"
                         cy="58.12"
                         r={radius}
-                        stroke="url(#gradient)" 
+                        stroke="url(#gradient)"
                         strokeWidth="10"
                         fill="none"
                         strokeDasharray={circumference}
                         strokeDashoffset={circumference - progress}
-                        strokeLinecap="round" 
+                        strokeLinecap="round"
                         style={{ transition: "stroke-dashoffset 0.3s ease-in-out" }}
                     />
                     <defs>
-                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%">
                             <stop offset="0%" stopColor="#FF7F71" />
                             <stop offset="100%" stopColor="#FFAAAA" />
                         </linearGradient>
@@ -186,12 +175,16 @@ const TestPage = () => {
                 <p className="time-left">{timeLeft}초</p>
             </div>
             <div className='question-container'>
-                <QuestionCreate 
-                    question={questions[currentIndex]}
-                    options={options[currentIndex]}
-                    onAnswerSelect={(answer) => setAnswers(prev => prev + answer)} 
-                />            
-            </div>    
+                {loading ? (
+                    <p>Loading...</p>
+                ) : (
+                    <QuestionCreate
+                        question={questions[currentIndex]}
+                        options={options[currentIndex]}
+                        onAnswerSelect={(answer) => setAnswers((prev) => prev + answer)}
+                    />
+                )}
+            </div>
         </div>
     );
 };
