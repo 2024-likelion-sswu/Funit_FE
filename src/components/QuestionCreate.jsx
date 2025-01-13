@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const QuestionCreate = ({question, option1, option2, option3, option4}) => {
+const QuestionCreate = ({question, option1, option2, option3, option4, onAnswerSelect}) => {
     const [nickname, setNickname] = useState('Guest');
     const [clickOption, setClickOption] = useState('');
 
@@ -9,6 +9,7 @@ const QuestionCreate = ({question, option1, option2, option3, option4}) => {
 
     const handleOption = (event) => {
         setClickOption(event.target.value);
+        onAnswerSelect(event.target.value);
     }
 
     useEffect(() => {
