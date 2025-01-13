@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import icon from '../../assets/img/character/purple.png'
 import Button from '../../components/Button'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -23,6 +23,10 @@ const OnboardingPage2 = () => {
             navigate('/nickname');
         }
     }
+
+    useEffect(() => {
+        getName();
+    },[])
     
     return (
         <div className='container onboarding2-container'>
