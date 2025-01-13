@@ -7,12 +7,14 @@ import iconPink from '../../assets/img/character/pink.png'
 import iconBlue from '../../assets/img/character/skyblue.png'
 import iconYellow from '../../assets/img/character/yelloweye.png'
 import axiosInstance from './../../apis/axiosInstance';
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const LetterCreatePage = () => {
+    const { state } = useLocation();
+
     const [clickLetter, setClickLetter] = useState('pink');
     const [content, setContent] = useState('');
-    const [receiverNickname, setReceiverNickname]= useState();
+    const [receiverNickname, setReceiverNickname]= useState(state?.recipientNickname || '');
 
     const navigate = useNavigate();
 
@@ -47,7 +49,7 @@ const LetterCreatePage = () => {
         try {
             const response = await axiosInstance.post('/api/letters', {
                 senderNickname:senderNickname,
-                // receiverNickname:receiverNickname,
+                receiverNickname:receiverNickname,
                 content:content,
                 paperColor:paperColor,
             });
