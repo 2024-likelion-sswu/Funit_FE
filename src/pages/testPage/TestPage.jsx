@@ -7,20 +7,45 @@ import axiosInstance from '../../apis/axiosInstance';
 
 const TestPage = () => {
     const navigate = useNavigate();
-    const { userId } = useParams(); // URL에서 userId 가져오기
+    const { userNickname } = useParams(); // URL에서 userId 가져오기
     const [questions, setQuestions] = useState([]);
     const [options, setOptions] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [timeLeft, setTimeLeft] = useState(15);
     const [loading, setLoading] = useState(true);
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
+        const fetchNickname = async () => {
+            try {
+                console.log(`Fetching nickname for userId: ${userNickname}`);
+                
+                // userId를 사용해 닉네임 가져오기
+                const response = await axiosInstance.get(`/api/users/${userNickname}`, {
+                    withCredentials: true,
+                });
+
+                setUserId(response.data.id); // 닉네임 상태 업데이트
+                console.log('response.data.id:', response.data.id);
+            } catch (error) {
+                console.error('Error fetching nickname:', error.response || error);
+                alert('사용자를 찾을 수 없습니다. 로그인 페이지로 이동합니다.');
+                navigate('/nickname'); // 에러 발생 시 /nickname으로 리다이렉트
+            }
+        };
+
+        fetchNickname();
+    }, [userNickname, navigate]);
+
+    useEffect(() => {
+        if (!userId) return;
+
         const fetchTestData = async () => {
             try {
-                console.log('Fetching test data for createdBy: 32');
+                console.log(`Fetching test data for userId: ${userId}`);
 
-                const testResponse = await axiosInstance.get(`/api/random_test/32`, {
+                const testResponse = await axiosInstance.get(`/api/random_test/${userId}`, {
                     withCredentials: true,
                 });
                 console.log('테스트 데이터:', testResponse.data);
@@ -40,7 +65,7 @@ const TestPage = () => {
         };
 
         fetchTestData();
-    }, [navigate]);
+    }, [navigate, userId]);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -60,8 +85,8 @@ const TestPage = () => {
         try {
             // 현재 질문에 대한 답안 제출
             const answerPayload = {
-                testedBy: 108, // testedBy는 108로 고정
-                createdBy: 32, // createdBy는 32로 고정
+                testedBy: userId,
+                createdBy: userId, 
                 answer: selectedAnswer,
             };
             console.log('Submitting answer:', answerPayload);
@@ -94,7 +119,7 @@ const TestPage = () => {
 
     const handlePrev = () => {
         if (currentIndex === 0) {
-            navigate(`/urlfriend/108`); // testedBy에 해당하는 경로로 리다이렉트
+            navigate(`/urlfriend/${userId}`);
         } else {
             setCurrentIndex(currentIndex - 1);
             setTimeLeft(15);
@@ -105,8 +130,8 @@ const TestPage = () => {
         try {
             // 점수 요청
             const scorePayload = {
-                testedBy: 108, // testedBy는 108로 고정
-                createdBy: 32, // createdBy는 32로 고정
+                testedBy: userId,
+                createdBy: userId, 
             };
             console.log('Requesting score:', scorePayload);
 
@@ -200,6 +225,7 @@ const TestPage = () => {
                         option3={options[currentIndex]?.[2] || ''} 
                         option4={options[currentIndex]?.[3] || ''} 
                         onAnswerSelect={handleAnswerSelect}
+                        userNickname={userNickname}
                     />
                 )}
             </div>

@@ -28,7 +28,7 @@ const UrlSharePage = () => {
             <div className='btn-wrapper'>
                 <button className='url-btn' 
                     // onClick={() => copy(window.location.href)}
-                        onClick={() => copy(`http://localhost:3000/${userId}`)}
+                        onClick={() => copy(`http://localhost:3000/${nickname}`)}
                     >
                     <p>URL</p>
                     <img src={copyIcon} alt="복사 아이콘" />
