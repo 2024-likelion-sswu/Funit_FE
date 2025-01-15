@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Button from '../../components/Button';
 import icon from '../../assets/img/character/mint.png';
-import axiosInstance from '../../apis/axiosInstance';
 
 
 const Score2Page = () => {
@@ -17,14 +16,7 @@ const Score2Page = () => {
                 const storedNickname = localStorage.getItem('username');
                 setNickname(storedNickname || 'Unknown');
 
-                if (score === null) {
-                    const userId = localStorage.getItem('userId');
-                    const response = await axiosInstance.post('/api/record/score', {
-                        testedBy: 3,
-                        createdBy: 104,
-                    });
-                    setScore(response.data);
-                }
+             
             } catch (error) {
                 console.error('점수나 닉네임을 가져오는 중 오류 발생:', error.response || error);
                 alert('데이터를 불러오는 데 실패했습니다.');

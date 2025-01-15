@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const QuestionCreate = ({question, option1, option2, option3, option4, onAnswerSelect}) => {
+const QuestionCreate = ({userNickname, question, option1, option2, option3, option4, onAnswerSelect}) => {
     const [nickname, setNickname] = useState('Guest');
     const [clickOption, setClickOption] = useState('');
 
@@ -26,7 +26,7 @@ const QuestionCreate = ({question, option1, option2, option3, option4, onAnswerS
         <div className='question-create-container'>
             <h2 className='question'>
                 <strong>Q.</strong>
-                {nickname}님이 {question}
+                {userNickname}님이 {question}
             </h2>
             <div className='option-container'>
                 <form>
