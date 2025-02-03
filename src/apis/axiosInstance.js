@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'https://dreamcatcherrr.store',
+    baseURL: 'http://localhost:8080/', // 로컬 주소로 변경
     withCredentials: true,  // 쿠키 자동 포함
 });
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import nextIcon from '../../assets/img/test/next.png';
 import backIcon from '../../assets/img/test/back.png';
 import QuestionCreate from '../../components/QuestionCreate';
@@ -7,18 +7,47 @@ import axiosInstance from '../../apis/axiosInstance';
 
 const TestPage = () => {
     const navigate = useNavigate();
-    const [userId] = useState(104); // 고정된 userId 104
+    const { userNickname } = useParams(); // URL에서 userId 가져오기
     const [questions, setQuestions] = useState([]);
     const [options, setOptions] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [timeLeft, setTimeLeft] = useState(15);
     const [loading, setLoading] = useState(true);
+    const [userId, setUserId] = useState(0);
+    const [friendId, setFriendId] = useState(0);
+    const [click, setClick] = useState(null);
 
     useEffect(() => {
+        const fetchNickname = async () => {
+            try {
+                console.log(`Fetching nickname for userId: ${userNickname}`);
+                
+                // userId를 사용해 닉네임 가져오기
+                const response = await axiosInstance.get(`/api/users/${userNickname}`, {
+                    withCredentials: true,
+                });
+
+                setUserId(response.data.id); // 닉네임 상태 업데이트
+                console.log('response.data.id:', response.data.id);
+                setFriendId(localStorage.getItem('friendId'));
+            } catch (error) {
+                console.error('Error fetching nickname:', error.response || error);
+                alert('사용자를 찾을 수 없습니다. 로그인 페이지로 이동합니다.');
+                navigate('/nickname'); // 에러 발생 시 /nickname으로 리다이렉트
+            }
+        };
+
+        fetchNickname();
+    }, [userNickname, navigate]);
+
+    useEffect(() => {
+        if (!userId) return;
+
         const fetchTestData = async () => {
             try {
-                // 104번 사용자의 테스트 데이터 가져오기
+                console.log(`Fetching test data for userId: ${userId}`);
+
                 const testResponse = await axiosInstance.get(`/api/random_test/${userId}`, {
                     withCredentials: true,
                 });
@@ -45,6 +74,10 @@ const TestPage = () => {
         const timer = setInterval(() => {
             setTimeLeft((prev) => {
                 if (prev === 1) {
+                    if (!click) {  // 아무 것도 선택되지 않은 경우
+                        setClick(options[currentIndex]?.[0]); // 첫 번째 옵션 자동 선택
+                        handleAnswerSelect(options[currentIndex]?.[0]); // 선택된 옵션 전달
+                    }
                     handleNext();
                     return 15;
                 }
@@ -53,14 +86,14 @@ const TestPage = () => {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [currentIndex]);
+    }, [currentIndex, click, options]);
 
     const handleAnswerSubmit = async (selectedAnswer) => {
         try {
             // 현재 질문에 대한 답안 제출
             const answerPayload = {
-                testedBy: 3,
-                createdBy: 104, 
+                testedBy: Number(friendId),
+                createdBy: userId, 
                 answer: selectedAnswer,
             };
             console.log('Submitting answer:', answerPayload);
@@ -78,14 +111,22 @@ const TestPage = () => {
 
     const handleNext = async () => {
         const currentAnswer = answers[currentIndex];
-        if (currentAnswer) {
-            await handleAnswerSubmit(currentAnswer); // 현재 질문의 답안 제출
+        if(!currentAnswer) {
+            setClick(options[currentIndex]?.[0]);
+            handleAnswerSelect(options[currentIndex]?.[0]);
         }
+        if (currentAnswer) {
+            await handleAnswerSubmit(currentAnswer);
+        } 
 
         if (currentIndex < questions.length - 1) {
             setCurrentIndex(currentIndex + 1);
             setTimeLeft(15);
         } else {
+            // if (!currentAnswer) {
+            //     setClick(options[currentIndex]?.[0]);
+            //     handleAnswerSelect(options[currentIndex]?.[0]);
+            // }
             // 마지막 질문인 경우 점수를 요청
             handleScoreRequest();
         }
@@ -93,7 +134,7 @@ const TestPage = () => {
 
     const handlePrev = () => {
         if (currentIndex === 0) {
-            navigate("/urlfriend");
+            navigate(`/urlfriend/${userId}`);
         } else {
             setCurrentIndex(currentIndex - 1);
             setTimeLeft(15);
@@ -103,9 +144,12 @@ const TestPage = () => {
     const handleScoreRequest = async () => {
         try {
             // 점수 요청
+            if (!answers[currentIndex]) {
+                setAnswers([options[currentIndex]?.[0]]);
+            }
             const scorePayload = {
-                testedBy: 3,
-                createdBy: 104,
+                testedBy: Number(friendId),
+                createdBy: userId,
             };
             console.log('Requesting score:', scorePayload);
 
@@ -199,6 +243,7 @@ const TestPage = () => {
                         option3={options[currentIndex]?.[2] || ''} 
                         option4={options[currentIndex]?.[3] || ''} 
                         onAnswerSelect={handleAnswerSelect}
+                        userNickname={userNickname}
                     />
                 )}
             </div>

@@ -4,12 +4,12 @@ import Button from '../../components/Button';
 import icon from '../../assets/img/character/mint.png';
 import axiosInstance from '../../apis/axiosInstance';
 
-
 const Score1Page = () => {
-    const { state } = useLocation();
-    const [score, setScore] = useState(state?.score || null); // 네비게이트로 전달된 점수
-    const [nickname, setNickname] = useState('');
+    const { state } = useLocation(); // 네비게이트로 전달된 state (점수, createdBy ID 등 포함)
+    const [score, setScore] = useState(state?.score || null); // 전달된 점수
+    const [nickname, setNickname] = useState(''); // testcreated의 닉네임
     const navigate = useNavigate();
+
 
     useEffect(() => {
         const fetchNicknameAndScore = async () => {
@@ -17,14 +17,6 @@ const Score1Page = () => {
                 const storedNickname = localStorage.getItem('username');
                 setNickname(storedNickname || 'Unknown');
 
-                if (score === null) {
-                    const userId = localStorage.getItem('userId');
-                    const response = await axiosInstance.post('/api/record/score', {
-                        testedBy: 3,
-                        createdBy: 104,
-                    });
-                    setScore(response.data);
-                }
             } catch (error) {
                 console.error('점수나 닉네임을 가져오는 중 오류 발생:', error.response || error);
                 alert('데이터를 불러오는 데 실패했습니다.');
@@ -33,9 +25,11 @@ const Score1Page = () => {
 
         fetchNicknameAndScore();
     }, [score]);
+
     const handleButtonClick = () => {
         navigate('/tree'); 
     };
+
     return (
         <div className='container score-container'>
             <h2>
