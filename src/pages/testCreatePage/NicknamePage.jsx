@@ -55,7 +55,7 @@ const NicknamePage = () => {
             localStorage.setItem('username', nickname);
             console.log('username = ', nickname);
             localStorage.setItem('userId', response.data.id);
-            navigate('/onboarding');
+            navigate('/choose');
         } catch (error) {
             console.error('로그인 에러:', error);
             if (error.response.status === 403) {

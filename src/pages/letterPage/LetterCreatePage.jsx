@@ -27,13 +27,13 @@ const LetterCreatePage = () => {
     const handleLetterColor = () => {
         switch (clickLetter) {
             case 'pink':
-                return 'rgb(255, 127, 113, 0.3)';
+                return '#ffe4e1';
             case 'blue':
-                return 'rgb(179, 226, 225, 0.4)';
+                return '#e1f5fe';
             case 'yellow':
-                return 'rgb(255, 238, 177, 0.4)';
+                return '#fff9c4';
             default:
-                return 'rgb(255, 127, 113, 0.3)';
+                return '#ffe4e1';
         }
     }
 
@@ -42,10 +42,10 @@ const LetterCreatePage = () => {
             clickLetter === 'pink' ? 'red' :
             clickLetter === 'blue' ? 'blue' :
             clickLetter === 'yellow' ? 'yellow' : 'red';
-        console.log('편지지 색상 : ', paperColor);
-        console.log('편지 내용: ', content);
-        console.log('편지 보내는 사람', senderNickname);
-        console.log('편지 받는 사람 :', receiverNickname);
+            console.log('편지지 색상 : ', paperColor);
+            console.log('편지 내용: ', content);
+            console.log('편지 보내는 사람', senderNickname);
+            console.log('편지 받는 사람 :', receiverNickname);
         try {
             const response = await axiosInstance.post('/api/letters', {
                 senderNickname:senderNickname,
@@ -95,6 +95,7 @@ const LetterCreatePage = () => {
                         onChange={(e) => setContent(e.target.value)}
                     >
                     </textarea>
+                    {clickLetter === 'pink' && <img src={iconPink} alt="편지 아이콘" />}
                     {clickLetter === 'red' && <img src={iconPink} alt="편지 아이콘" />}
                     {clickLetter === 'blue' && <img src={iconBlue} alt="편지 아이콘" />}
                     {clickLetter === 'yellow' && <img src={iconYellow} alt="편지 아이콘" />}

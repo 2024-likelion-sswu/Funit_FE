@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Main from './pages/mainPage/MainPage'
 import NicknamePage from './pages/testCreatePage/NicknamePage'
+import ChoosePage from './pages/mainPage/ChoosePage'
 import OnboardingPage from './pages/testCreatePage/OnboardingPage'
 import TestCreatePage from './pages/testCreatePage/TestCreatePage'
 import OnboardingPage2 from './pages/testCreatePage/OnboardingPage2'
@@ -23,6 +24,7 @@ const App = () => {
             <Routes>
                 <Route path='/' element={<Main />} />
                 <Route path='/nickname' element={<NicknamePage />} />
+                <Route path='/choose' element={<ChoosePage />} />
                 <Route path='/onboarding' element={<OnboardingPage />} />
                 <Route path='/testCreate' element={<TestCreatePage />} />
                 <Route path='/onboarding2' element={<OnboardingPage2 />} />

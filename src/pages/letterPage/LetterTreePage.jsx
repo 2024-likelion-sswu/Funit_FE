@@ -77,14 +77,14 @@ const LetterTreePage = () => {
 
   const getPaperColor = (color) => {
     switch (color) {
-      case 'red': 
-        return 'rgba(255, 127, 113, 0.3)';
-      case 'blue':
-        return 'rgba(179, 226, 225, 0.4)';
-      case 'yellow':
-        return 'rgba(255, 238, 177, 0.4)';
-      default:
-        return 'rgba(255, 127, 113, 0.3)';
+      case 'red':
+        return '#ffe4e1';
+    case 'blue':
+        return '#e1f5fe';
+    case 'yellow':
+        return '#fff9c4';
+    default:
+        return '#ffe4e1';
     }
   };
 
@@ -98,13 +98,22 @@ const LetterTreePage = () => {
         <img src={treeImage} alt="트리" className="tree-image" />
   
         <div className="envelope-container">
-          {Array.from({ length: receivedLetters }).map((_, index) => (
+          {/* {Array.from({ length: receivedLetters }).map((_, index) => (
             <img
               key={index}
               src={envelopeImages[index % envelopeImages.length]}
               alt={`편지 ${index + 1}`}
               className={`envelope envelope-${index + 1}`}
               onClick={() => letterOpen(index)}
+            />
+          ))} */}
+          {receivedLetters.map((id, index) => (
+            <img
+              key={index}
+              src={envelopeImages[index % envelopeImages.length]}
+              alt={`편지 ${index + 1}`}
+              className={`envelope envelope-${index + 1}`}
+              onClick={() => letterOpen(id)}
             />
           ))}
         </div>
