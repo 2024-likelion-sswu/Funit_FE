@@ -8,7 +8,6 @@ import pink from '../../assets/img/character/pink.png';
 import skyblue from '../../assets/img/character/skyblue.png';
 import yelloweye from '../../assets/img/character/yelloweye.png';
 import gray from '../../assets/img/character/gray.png';
-import mint from '../../assets/img/character/mint.png';
 import purpleeye from '../../assets/img/character/purpleeye.png';
 
 const RankingPage = () => {
@@ -18,7 +17,7 @@ const RankingPage = () => {
   const [nickname, setNickname] = useState(''); // 유저 닉네임
   const [userId, setUserId] = useState(null); // 유저 ID
 
-  const characterImages = [pink, skyblue, yelloweye, purpleeye, gray, mint];
+  const characterImages = [pink, skyblue, yelloweye, purpleeye, gray];
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -66,7 +65,7 @@ const RankingPage = () => {
       <div className="ranking-header">
         <img src={icon} alt="상단아이콘" />
         <p>
-          누가 나를 가장 잘 알고 있을까요?<br />
+          누가 나를 가장 잘 알고 있을까?<br />
           친구들의 순위를 확인하세요!
         </p>
       </div>
@@ -74,22 +73,26 @@ const RankingPage = () => {
       {/* 랭킹 리스트 */}
       <div className="ranking-list">
         {rankings.map((rank, index) => (
-          <div key={index} className={`ranking-item rank-${index + 1}`}>
+          <div key={index} className={`ranking-item rank-${((index + 1)%5)}`}>
             <div className="ranking-avatar">
               <img src={characterImages[index % characterImages.length]} alt="캐릭터 이미지" />
             </div>
             <div className="ranking-details">
-              <div className="nickname-container">
-                <p className="nickname">
-                  {nickname}님의 찐친!<br />
-                  <h1>{rank.testedByNickname}</h1>
-                </p>
-                <button
-                  className={`send-letter-btn ${rank.score >= 6 ? 'show' : ''}`}
-                  onClick={() => handleLetterClick(rank.testedByNickname)}
-                >
-                  편지 보내기
-                </button>
+              <div className="ranking-nickname-container">
+                <div className="nickname">
+                  {rank.score>=10 ? `${nickname}님의 찐친!`:
+                  rank.score>=6 ? '조금 더 친해지자!':'우리 처음 본 사이인거지 ?'}                  
+                  <br />
+                  <div className='tested-by-nickname'>
+                    <p>{rank.testedByNickname}</p>
+                    <button
+                      className={`send-letter-btn ${rank.score >= 6 ? 'show' : ''}`}
+                      onClick={() => handleLetterClick(rank.testedByNickname)}
+                    >
+                    편지 보내기
+                  </button>
+                </div>
+                </div>
               </div>
               <p className="score">
                 <span style={{ color: '#FF7F71' }}>{rank.score}</span>점
