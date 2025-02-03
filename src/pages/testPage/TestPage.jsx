@@ -14,7 +14,9 @@ const TestPage = () => {
     const [answers, setAnswers] = useState([]);
     const [timeLeft, setTimeLeft] = useState(15);
     const [loading, setLoading] = useState(true);
-    const [userId, setUserId] = useState(null);
+    const [userId, setUserId] = useState(0);
+    const [friendId, setFriendId] = useState(0);
+    const [click, setClick] = useState(null);
 
     useEffect(() => {
         const fetchNickname = async () => {
@@ -28,6 +30,7 @@ const TestPage = () => {
 
                 setUserId(response.data.id); // 닉네임 상태 업데이트
                 console.log('response.data.id:', response.data.id);
+                setFriendId(localStorage.getItem('friendId'));
             } catch (error) {
                 console.error('Error fetching nickname:', error.response || error);
                 alert('사용자를 찾을 수 없습니다. 로그인 페이지로 이동합니다.');
@@ -71,6 +74,10 @@ const TestPage = () => {
         const timer = setInterval(() => {
             setTimeLeft((prev) => {
                 if (prev === 1) {
+                    if (!click) {  // 아무 것도 선택되지 않은 경우
+                        setClick(options[currentIndex]?.[0]); // 첫 번째 옵션 자동 선택
+                        handleAnswerSelect(options[currentIndex]?.[0]); // 선택된 옵션 전달
+                    }
                     handleNext();
                     return 15;
                 }
@@ -79,13 +86,13 @@ const TestPage = () => {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [currentIndex]);
+    }, [currentIndex, click, options]);
 
     const handleAnswerSubmit = async (selectedAnswer) => {
         try {
             // 현재 질문에 대한 답안 제출
             const answerPayload = {
-                testedBy: userId,
+                testedBy: Number(friendId),
                 createdBy: userId, 
                 answer: selectedAnswer,
             };
@@ -104,14 +111,22 @@ const TestPage = () => {
 
     const handleNext = async () => {
         const currentAnswer = answers[currentIndex];
+        if(!currentAnswer) {
+            setClick(options[currentIndex]?.[0]);
+            handleAnswerSelect(options[currentIndex]?.[0]);
+        }
         if (currentAnswer) {
             await handleAnswerSubmit(currentAnswer);
-        }
+        } 
 
         if (currentIndex < questions.length - 1) {
             setCurrentIndex(currentIndex + 1);
             setTimeLeft(15);
         } else {
+            // if (!currentAnswer) {
+            //     setClick(options[currentIndex]?.[0]);
+            //     handleAnswerSelect(options[currentIndex]?.[0]);
+            // }
             // 마지막 질문인 경우 점수를 요청
             handleScoreRequest();
         }
@@ -129,9 +144,12 @@ const TestPage = () => {
     const handleScoreRequest = async () => {
         try {
             // 점수 요청
+            if (!answers[currentIndex]) {
+                setAnswers([options[currentIndex]?.[0]]);
+            }
             const scorePayload = {
-                testedBy: userId,
-                createdBy: userId, 
+                testedBy: Number(friendId),
+                createdBy: userId,
             };
             console.log('Requesting score:', scorePayload);
 

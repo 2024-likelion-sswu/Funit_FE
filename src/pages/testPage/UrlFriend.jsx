@@ -22,6 +22,8 @@ const UrlFriend = () => {
                 const fetchedNickname = response.data.nickname; // API 응답에서 닉네임 추출
                 setNickname(fetchedNickname); // 닉네임 상태 업데이트
                 console.log('Fetched nickname:', fetchedNickname);
+                localStorage.setItem('username', response.data.nickname);
+                localStorage.setItem('userId', response.data.id);
             } catch (error) {
                 console.error('Error fetching nickname:', error.response || error);
                 alert('사용자를 찾을 수 없습니다. 로그인 페이지로 이동합니다.');
@@ -33,9 +35,9 @@ const UrlFriend = () => {
     }, [userNickname, navigate]);
 
     useEffect(() => {
-        // 3초 후 /test/{userId} 페이지로 이동
+        // 3초 후 닉네임 생성성 페이지로 이동
         const timer = setTimeout(() => {
-            navigate(`/test/${userNickname}`); // userId를 경로에 포함
+            navigate('/friendNickname');
         }, 3000);
 
         return () => clearTimeout(timer); // 타이머 클린업
@@ -44,11 +46,7 @@ const UrlFriend = () => {
     return (
         <div className='container urlfriend'>
             <img src={icon} alt="URL 받은 친구 아이콘" />
-            <h3>
-                {nickname 
-                    ? `${nickname}님의 테스트가 도착했어요! 풀어볼까요?`
-                    : '테스트 데이터를 가져오는 중입니다...'}
-            </h3>
+            {nickname && <h3>{nickname}님의 테스트가 도착했어요!<br/>풀어볼까요?</h3>}
         </div>
     );
 };

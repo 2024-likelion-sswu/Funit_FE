@@ -26,7 +26,7 @@ const QuestionCreate = ({userNickname, question, option1, option2, option3, opti
         <div className='question-create-container'>
             <h2 className='question'>
                 <strong>Q.</strong>
-                {userNickname}님이 {question}
+                {nickname}님이 {question}
             </h2>
             <div className='option-container'>
                 <form>

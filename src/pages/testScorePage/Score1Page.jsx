@@ -10,30 +10,21 @@ const Score1Page = () => {
     const [nickname, setNickname] = useState(''); // testcreated의 닉네임
     const navigate = useNavigate();
 
+
     useEffect(() => {
-        const fetchTestCreatorNickname = async () => {
+        const fetchNicknameAndScore = async () => {
             try {
-                if (!state?.createdBy) {
-                    console.error('createdBy 정보가 없습니다.');
-                    return;
-                }
+                const storedNickname = localStorage.getItem('username');
+                setNickname(storedNickname || 'Unknown');
 
-                // createdBy를 사용해 닉네임 가져오기
-                const response = await axiosInstance.get(`/api/users/${state.createdBy}`, {
-                    withCredentials: true,
-                });
-
-                const fetchedNickname = response.data.nickname; // API 응답에서 닉네임 추출
-                setNickname(fetchedNickname); // 닉네임 상태 업데이트
-                console.log('Fetched test creator nickname:', fetchedNickname);
             } catch (error) {
-                console.error('testcreated 닉네임을 가져오는 중 오류 발생:', error.response || error);
+                console.error('점수나 닉네임을 가져오는 중 오류 발생:', error.response || error);
                 alert('데이터를 불러오는 데 실패했습니다.');
             }
         };
 
-        fetchTestCreatorNickname();
-    }, [state?.createdBy]); // createdBy가 변경될 때마다 실행
+        fetchNicknameAndScore();
+    }, [score]);
 
     const handleButtonClick = () => {
         navigate('/tree'); 
