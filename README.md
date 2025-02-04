@@ -8,7 +8,7 @@
 ## Screen
 |닉네임 생성|테스트 생성|테스트 진행|편지 작성|편지 읽기|
 |-|-|-|-|-|
-|![메인화면2](https://github.com/user-attachments/assets/41ce0567-c882-454a-9a63-f87b151f9bf6)|![테스트 생성](https://github.com/user-attachments/assets/b67978ee-c61a-4d86-bfa1-38904c5ecf35)|![테스트 진행](https://github.com/user-attachments/assets/89beafef-5c63-444d-80c4-ab48abed4843)|![편지 작성](https://github.com/user-attachments/assets/6caf71ae-2cc3-4faf-a8c6-69afdd450a9d)|![편지 읽기](https://github.com/user-attachments/assets/dedaaec6-0042-443c-ba69-26c1dad9e332)|
+|![메인화면](https://github.com/user-attachments/assets/41ce0567-c882-454a-9a63-f87b151f9bf6)|![테스트 생성](https://github.com/user-attachments/assets/b67978ee-c61a-4d86-bfa1-38904c5ecf35)|![테스트 진행](https://github.com/user-attachments/assets/89beafef-5c63-444d-80c4-ab48abed4843)|![편지 작성](https://github.com/user-attachments/assets/6caf71ae-2cc3-4faf-a8c6-69afdd450a9d)|![편지 읽기](https://github.com/user-attachments/assets/dedaaec6-0042-443c-ba69-26c1dad9e332)|
 
 ## Contributors
 
