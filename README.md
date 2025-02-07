@@ -1,5 +1,5 @@
 # 펀잇
-![image](https://github.com/user-attachments/assets/a62724ea-901e-4b6e-9980-02ba084a5768)
+![image](https://github.com/user-attachments/assets/34dfeb23-77b9-4ef0-9ac9-716b950a1651)
 ![image](https://github.com/user-attachments/assets/6e50d78d-a1bd-415d-880c-6bb5916325f3)
 ![image](https://github.com/user-attachments/assets/b6772ac1-fd0a-4207-80a4-3a44dbfb0abe)
 ![image](https://github.com/user-attachments/assets/26e3ac76-8845-489b-8ccf-bdb2759f35da)
@@ -15,12 +15,12 @@
 |![랭킹](https://github.com/user-attachments/assets/08baf3f1-c997-4b26-b180-38ed5a7cc03e)|![편지](https://github.com/user-attachments/assets/6caf71ae-2cc3-4faf-a8c6-69afdd450a9d)|![트리](https://github.com/user-attachments/assets/dedaaec6-0042-443c-ba69-26c1dad9e332)|
 
 
-## Contributors
+## Frontend Developer
 
 |윤나경|신예은|
 |-|-|
 |<img src="https://github.com/nakyeongg.png" width="100"/>|<img src="https://github.com/yengeun.png" width="100"/>|
-|[@nakyeongg](https://github.com/nakyeongg)|[@yengeun](https://github.com/yengeun)|
+|<p align='center'>[@nakyeongg](https://github.com/nakyeongg)</p>|<p align='center'>[@yengeun](https://github.com/yengeun)</p>|
 
 ## Commit Convention
 
