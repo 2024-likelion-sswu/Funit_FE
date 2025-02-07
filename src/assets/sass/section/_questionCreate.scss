@@ -1,0 +1,103 @@
+.question-create-container {
+    background-color: var(--white);
+    border-radius: 15px;
+    padding: 12px 50px;
+    width: 353px;
+
+    .question {
+        display: flex;
+        align-items: flex-start;
+        color: #6A6A6E;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 12px;
+
+        strong {
+            color: var(--maincolor);
+            font-size: 21px;
+            margin-right: 6px;
+            line-height: 120%;
+        }
+
+        input {
+            border: 0;
+            font-weight: bold;
+            font-size: 16px;
+            color: #6A6A6E;
+            width: 100%;
+            font-family: var(--mainfont);
+        }
+    }
+
+    .option-container {
+        width: 253px;
+    }
+
+    form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 9px 7px;
+        color: #6A6A6E;
+        font-weight: bold;
+        font-size: 16px;
+        width: 253px;
+
+        label {
+            border-radius: 10px;
+            border: 1px solid #C7C7C7;
+            padding: 7px 11px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 123px;
+            word-wrap: break-word;
+            word-break: break-all;
+            cursor: pointer;
+
+            span {
+                flex: 1;
+            }
+
+            textarea {
+                border: 0;
+                font-size: 16px;
+                font-weight: bold;
+                color: #6A6A6E;
+                width: 74px;
+                resize: none;
+                font-family: var(--mainfont);
+                padding: 0;
+                height: 24px;
+                line-height: 150%;
+
+                &::placeholder {
+                    color: #E3E3E3;
+                }
+
+                &:focus {
+                    outline-style: none;
+                }
+            }
+
+            input[type='radio'] {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                border: 1px solid #C7C7C7;
+                outline: none;
+                cursor: pointer;
+                margin: 0 0 0 5px;
+
+                &:checked {
+                    background-color: var(--maincolor);
+                    border: 3px solid white;
+                    box-shadow: 0 0 0 1px var(--maincolor);
+                }
+            }
+        }
+    }
+    
+}

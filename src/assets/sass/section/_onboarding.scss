@@ -1,0 +1,33 @@
+.onboarding-container,
+.onboarding2-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 141px;
+    }
+
+    >p {
+        font-size: 22px;
+        font-weight: bold;
+        margin-top: 47px;
+        text-align: center;
+    }
+
+    .guide {
+        font-size: 13px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        bottom: 112px;
+        color: #1F2427;
+        background-color: #FBBBB6;
+        border-radius: 100px;
+        width: 341px;
+        height: 32px;
+    }
+}

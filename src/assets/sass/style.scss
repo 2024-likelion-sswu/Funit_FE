@@ -1,0 +1,24 @@
+// scss를 한 번에 묶어두고 index.js에서 이 파일만 import 합니다
+
+// setting
+@import "setting/common";
+@import "setting/reset";
+@import "setting/var";
+
+// section
+@import "section/main";
+@import "section/nickname";
+@import "section/onboarding";
+@import "section/testCreate";
+@import "section/testCustom";
+@import "section/urlShare";
+@import "section/urlfriend";
+@import "section/score";
+@import "section/button";
+@import "section/questionCreate";
+@import "section/test";
+@import "section/letterRead";
+@import "section/letterCreate";
+@import "section/ranking";
+@import "section/letterTree";
+@import "section/choose";

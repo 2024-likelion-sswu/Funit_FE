@@ -1,0 +1,15 @@
+.splash-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-image: url('../../img/main/background.svg');
+    background-repeat: no-repeat;
+
+    h1 {
+        font-family: 'Yeongdo-Rg';
+        font-size: 63.96px;
+        color: var(--maincolor);
+        margin-top: 23px;
+    }
+}

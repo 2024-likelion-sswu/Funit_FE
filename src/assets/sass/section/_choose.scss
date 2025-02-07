@@ -1,0 +1,24 @@
+.choose-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    
+
+    .btn {
+        background-color: var(--maincolor);
+        width: 341px;
+        height: 52px;
+        color: var(--white);
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 0 auto;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin: 10px;
+    }
+}
